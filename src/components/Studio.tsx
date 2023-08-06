@@ -1,8 +1,7 @@
+"use client";
+
 import { Suspense, useState, FC } from "react";
-import {
-  ArrowRoutingRectangleMultiple24Regular,
-  BuildingFactoryRegular,
-} from "@fluentui/react-icons";
+import { ArrowRoutingRectangleMultiple24Regular } from "@fluentui/react-icons";
 import {
   TabList,
   Tab,
@@ -11,9 +10,12 @@ import {
   makeStyles,
   tokens,
 } from "@fluentui/react-components";
+import { useRouter } from "next/navigation";
 
 import { Loading } from "@/components";
 import { DeltalakeIcon, GraphQLIcon, DeltaSharingIcon } from "@/icons";
+
+const TAB_NAV_HEIGHT = "45px";
 
 const useStyles = makeStyles({
   root: {
@@ -22,19 +24,23 @@ const useStyles = makeStyles({
     top: 0,
     left: 0,
     fontFamily: "Fira Code, monospace",
+    overflowX: "hidden",
+    overflowY: "hidden",
   },
-  content: { height: "calc(100vh - 45px)", display: "flex" },
-  tabList: { height: "45px" },
+  content: { height: `calc(100vh - ${TAB_NAV_HEIGHT})`, display: "flex" },
+  tabList: { height: TAB_NAV_HEIGHT },
   firaLabel: { fontFamily: "Fira Code, monospace" },
   connected: { color: tokens.colorPaletteLightGreenForeground1 },
 });
 
 export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
   const classes = useStyles();
-  const [selectedValue, setSelectedValue] = useState("network");
+  const router = useRouter();
+  const [selectedValue, setSelectedValue] = useState("/");
 
   const onTabSelect: TabListProps["onTabSelect"] = (_event, data) => {
     setSelectedValue(data.value as string);
+    router.push(data.value as string);
   };
 
   return (
@@ -45,7 +51,7 @@ export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
         size="medium"
         className={classes.tabList}
       >
-        <Tab id="studio" value="studio">
+        <Tab id="studio" value="/">
           <Label size="large" className={classes.firaLabel}>
             Lakehouse Studio
           </Label>
@@ -53,33 +59,35 @@ export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
         <Tab
           id="network"
           icon={<ArrowRoutingRectangleMultiple24Regular />}
-          value="network"
+          value="/network"
         >
           <Label>Network</Label>
         </Tab>
         <Tab
           id="delta-sharing"
           icon={<DeltaSharingIcon height={16} width={16} />}
-          value="delta-sharing"
+          value="/delta-sharing"
         >
           <Label>Delta Sharing</Label>
         </Tab>
         <Tab
           id="delta"
           icon={<DeltalakeIcon height={16} width={16} />}
-          value="delta"
+          value="/delta"
         >
           <Label>Delta Inspect</Label>
         </Tab>
         <Tab
           id="graphql"
           icon={<GraphQLIcon height={16} width={16} />}
-          value="graphql"
+          value="/graphql"
         >
           <Label>GraphQL</Label>
         </Tab>
       </TabList>
-      <Suspense fallback={<Loading />}>{children}</Suspense>
+      <div className={classes.content}>
+        <Suspense fallback={<Loading />}>{children}</Suspense>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, type FC } from "react";
-import { ThemeProvider, useThemeContext } from "./ThemeProvider";
 import {
   createDOMRenderer,
   RendererProvider,
@@ -12,7 +11,8 @@ import {
   makeStyles,
   tokens,
 } from "@fluentui/react-components";
-import { Studio } from "@/components";
+
+import { Studio, ThemeProvider, useThemeContext } from "@/components";
 
 const renderer = createDOMRenderer();
 

@@ -1,44 +1,28 @@
 "use client";
 
-// Import necessary dependencies from '@fluentui/react-components'
-import {
-  makeStyles,
-  shorthands,
-  Text,
-  Title1,
-  tokens,
-} from "@fluentui/react-components";
+import { makeStyles, shorthands } from "@fluentui/react-components";
 
-// Create a custom 'useStyles' hook to define the styling for the Home component.
+import { AppearanceCard } from "@/components";
+
 const useStyles = makeStyles({
   container: {
-    ...shorthands.padding(tokens.spacingHorizontalXXL),
-    ...shorthands.gap(tokens.spacingVerticalM),
+    ...shorthands.padding("25px"),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: "100vh",
+    alignItems: "start",
+    justifyContent: "start",
+    minHeight: 0,
+    minWidth: 0,
+    flexGrow: 1,
   },
 });
 
-/**
- * Home component.
- *
- * This component renders a simple 'Hello World!' message and
- * some text styled with Fluent UI components and utilities.
- */
 export default function Home(): JSX.Element {
-  // Retrieve the styles object from the 'useStyles' hook.
   const styles = useStyles();
 
-  // Render the Home component with a Title1 and Text component from Fluent UI.
   return (
     <main className={styles.container}>
-      <Title1 align="center">Hello World!</Title1>
-      <Text>
-        I am learning React and <strong>Fluent UI</strong>.
-      </Text>
+      <AppearanceCard />
     </main>
   );
 }
