@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, type FC } from "react";
 import {
   makeStyles,
   shorthands,
@@ -7,6 +8,8 @@ import {
   Title1,
   tokens,
 } from "@fluentui/react-components";
+import { useQuery } from "@tanstack/react-query";
+import { DeltaSharingClient } from "@/clients";
 
 const useStyles = makeStyles({
   container: {
@@ -20,15 +23,27 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DeltaSharing(): JSX.Element {
+const DeltaSharing: FC = () => {
   const styles = useStyles();
+  const [client] = useState(
+    new DeltaSharingClient({ baseUrl: "http://localhost:8080" })
+  );
+  const { data } = useQuery({
+    queryKey: ["login"],
+    queryFn: async ({ signal }) => {
+      return client.login(
+        { account: "delta", password: "password" },
+        { signal }
+      );
+    },
+  });
 
   return (
     <main className={styles.container}>
       <Title1 align="center">Hello Delta Sharing!</Title1>
-      <Text>
-        I am learning React and <strong>Fluent UI</strong>.
-      </Text>
+      <Text>{data?.profile.expirationTime}</Text>
     </main>
   );
-}
+};
+
+export default DeltaSharing;

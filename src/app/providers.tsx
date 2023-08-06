@@ -2,6 +2,13 @@
 
 import { useEffect, useState, type FC } from "react";
 import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import {
   createDOMRenderer,
   RendererProvider,
   FluentProvider,
@@ -15,10 +22,8 @@ import {
 import { Studio, ThemeProvider, useThemeContext } from "@/components";
 
 const renderer = createDOMRenderer();
+const queryClient = new QueryClient();
 
-/**
- * A custom style class for Fluent UI components.
- */
 const useStyles = makeStyles({
   root: {
     backgroundColor: tokens.colorBrandBackground2,
@@ -26,12 +31,6 @@ const useStyles = makeStyles({
   },
 });
 
-/**
- * Providers component.
- *
- * This component wraps other components with a set of providers
- * for Fluent UI, SSR, and a custom renderer.
- */
 export const Providers: FC<{ children: React.ReactNode }> = ({ children }) => {
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -44,23 +43,18 @@ export const Providers: FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <ThemeProvider>
-      <RendererProvider renderer={renderer || createDOMRenderer()}>
-        <SSRProvider>
-          <WrappedFluentProvider>{children}</WrappedFluentProvider>
-        </SSRProvider>
-      </RendererProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <RendererProvider renderer={renderer || createDOMRenderer()}>
+          <SSRProvider>
+            <WrappedFluentProvider>{children}</WrappedFluentProvider>
+          </SSRProvider>
+        </RendererProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
 
-/**
- * WrappedFluentProvider component.
- *
- * This component wraps the FluentProvider with the theme context provided
- * by the ThemeProvider. It is used to ensure that the theme value
- * is available and properly passed to the FluentProvider.
- */
 const WrappedFluentProvider: FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
