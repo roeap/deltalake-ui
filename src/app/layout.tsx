@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Providers } from "./providers";
+import { Fira_Code } from "next/font/google";
 
 interface metadata {
   /**
@@ -8,6 +9,11 @@ interface metadata {
   title: string;
   description: string;
 }
+
+const fira = Fira_Code({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata = {
   title: "Deltalake Explorer",
@@ -24,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }): JSX.Element {
   return (
-    <html lang="en">
+    <html lang="en" className={fira.className}>
       <body>
         <Providers>{children}</Providers>
       </body>

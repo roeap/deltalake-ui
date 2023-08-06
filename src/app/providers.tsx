@@ -1,7 +1,6 @@
 "use client";
 
-// Import necessary dependencies from 'react'
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FC } from "react";
 import { ThemeProvider, useThemeContext } from "./ThemeProvider";
 import {
   createDOMRenderer,
@@ -13,8 +12,8 @@ import {
   makeStyles,
   tokens,
 } from "@fluentui/react-components";
+import { Studio } from "@/components";
 
-// Create a DOM renderer for Fluent UI.
 const renderer = createDOMRenderer();
 
 /**
@@ -23,6 +22,7 @@ const renderer = createDOMRenderer();
 const useStyles = makeStyles({
   root: {
     backgroundColor: tokens.colorBrandBackground2,
+    fontFamily: "Fira Code",
   },
 });
 
@@ -32,11 +32,7 @@ const useStyles = makeStyles({
  * This component wraps other components with a set of providers
  * for Fluent UI, SSR, and a custom renderer.
  */
-export function Providers({
-  children,
-}: {
-  children: React.ReactNode;
-}): JSX.Element | null {
+export const Providers: FC<{ children: React.ReactNode }> = ({ children }) => {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
@@ -56,7 +52,7 @@ export function Providers({
       </RendererProvider>
     </ThemeProvider>
   );
-}
+};
 
 /**
  * WrappedFluentProvider component.
@@ -65,18 +61,16 @@ export function Providers({
  * by the ThemeProvider. It is used to ensure that the theme value
  * is available and properly passed to the FluentProvider.
  */
-const WrappedFluentProvider = ({
+const WrappedFluentProvider: FC<{ children: React.ReactNode }> = ({
   children,
-}: {
-  children: React.ReactNode;
-}): JSX.Element => {
+}) => {
   const styles = useStyles();
   const { theme } = useThemeContext();
   const currentTheme = theme === "light" ? webLightTheme : webDarkTheme;
 
   return (
     <FluentProvider theme={currentTheme} className={styles.root}>
-      {children}
+      <Studio>{children}</Studio>
     </FluentProvider>
   );
 };
