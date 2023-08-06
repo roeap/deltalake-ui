@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState, type FC } from "react";
+import { type FC } from "react";
 import { makeStyles, shorthands, Label } from "@fluentui/react-components";
 
-import { AppearanceCard } from "@/components";
+import { AppearanceCard, AddServiceCard } from "@/components";
 
 const useStyles = makeStyles({
   container: {
@@ -49,6 +49,9 @@ export default function Home(): JSX.Element {
     <main className={classes.container}>
       <RowContainer label="Appearance">
         <AppearanceCard />
+      </RowContainer>
+      <RowContainer label="Sharing Servers">
+        <AddServiceCard />
       </RowContainer>
     </main>
   );

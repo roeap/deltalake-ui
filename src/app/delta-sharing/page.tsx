@@ -9,22 +9,38 @@ import {
   tokens,
 } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
+
 import { DeltaSharingClient } from "@/clients";
+import { ResizeContent, ResizeHandleRight, ResizePanel } from "@/components";
 
 const useStyles = makeStyles({
   container: {
-    ...shorthands.padding(tokens.spacingHorizontalXXL),
-    ...shorthands.gap(tokens.spacingVerticalM),
+    display: "flex",
+    flexDirection: "row",
+    flexGrow: 1,
+  },
+  main: {
+    width: "100%",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: "100vh",
+    flexGrow: 1,
+  },
+  resizeHandle: {
+    cursor: "col-resize",
+    width: "3px",
+    height: "100%",
+    borderRightWidth: "1px",
+    borderRightStyle: "solid",
+    borderRightColor: tokens.colorNeutralBackground1Hover,
+    boxSizing: "border-box",
+    ":hover": {
+      backgroundColor: tokens.colorBrandForeground1,
+    },
   },
 });
 
 const DeltaSharing: FC = () => {
-  const styles = useStyles();
+  const classes = useStyles();
   const [client] = useState(
     new DeltaSharingClient({ baseUrl: "http://localhost:8080" })
   );
@@ -39,9 +55,16 @@ const DeltaSharing: FC = () => {
   });
 
   return (
-    <main className={styles.container}>
-      <Title1 align="center">Hello Delta Sharing!</Title1>
-      <Text>{data?.profile.expirationTime}</Text>
+    <main className={classes.container}>
+      <ResizePanel initialWidth={300} minWidth={200}>
+        <ResizeContent>
+          <div></div>
+        </ResizeContent>
+        <ResizeHandleRight>
+          <div className={classes.resizeHandle} />
+        </ResizeHandleRight>
+      </ResizePanel>
+      <div className={classes.main}></div>
     </main>
   );
 };
