@@ -1,16 +1,22 @@
 "use client";
 
-import { useState, type FC } from "react";
+import { useState, type FC, useCallback } from "react";
 import {
   makeStyles,
   shorthands,
-  Text,
-  Title1,
+  CardHeader,
   tokens,
+  Card,
+  CardPreview,
+  mergeClasses,
+  Text,
+  Caption1,
 } from "@fluentui/react-components";
+import { AddRegular, ServerRegular } from "@fluentui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 
 import { DeltaSharingClient } from "@/clients";
+import { DeltaSharingIcon } from "@/icons";
 import { ResizeContent, ResizeHandleRight, ResizePanel } from "@/components";
 
 const useStyles = makeStyles({
@@ -37,7 +43,90 @@ const useStyles = makeStyles({
       backgroundColor: tokens.colorBrandForeground1,
     },
   },
+  cardHeader: {
+    height: "25px",
+    width: "100%",
+    borderBottomStyle: "solid",
+    borderBottomWidth: tokens.strokeWidthThin,
+    borderBottomColor: tokens.colorNeutralForeground3,
+  },
+  cardBody: { height: "fit-content", width: "100%" },
+  cardBodyEmpty: {
+    height: "70px",
+    alignItems: "center",
+    justifyContent: "center",
+    ...shorthands.borderStyle("dashed"),
+    ...shorthands.borderWidth(tokens.strokeWidthThin),
+    ...shorthands.borderColor(tokens.colorNeutralForeground3),
+  },
+  resizeContent: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: tokens.spacingVerticalL,
+    ...shorthands.padding(tokens.spacingVerticalXL),
+  },
+  horizontalCardImage: {
+    width: "76px",
+    height: "69px",
+    display: "flex",
+    alignContent: "center",
+    justifyContent: "center",
+    paddingTop: "5px",
+  },
+  caption: {
+    color: tokens.colorNeutralForeground3,
+  },
 });
+
+type SharingServerProps = {
+  name: string;
+  description: string;
+  url: string;
+};
+
+export const ServiceCard: FC<SharingServerProps> = ({ name, description }) => {
+  const classes = useStyles();
+  const onClick = useCallback(() => console.log("Interactive!"), []);
+
+  return (
+    <Card
+      className={mergeClasses(classes.cardBody)}
+      appearance="filled-alternative"
+      onClick={onClick}
+      selected={true}
+      orientation="horizontal"
+    >
+      <CardPreview className={classes.horizontalCardImage}>
+        <DeltaSharingIcon />
+      </CardPreview>
+      <CardHeader
+        header={<Text weight="semibold">{name}</Text>}
+        description={
+          <Caption1 className={classes.caption}>{description}</Caption1>
+        }
+      />
+    </Card>
+  );
+};
+
+export const AddServiceCard: FC = () => {
+  const classes = useStyles();
+  const onClick = useCallback(() => console.log("Interactive!"), []);
+
+  return (
+    <Card
+      className={mergeClasses(classes.cardBody, classes.cardBodyEmpty)}
+      appearance="subtle"
+      onClick={onClick}
+    >
+      <CardPreview>
+        <AddRegular
+          style={{ color: tokens.colorNeutralForeground3, fontSize: "62px" }}
+        />
+      </CardPreview>
+    </Card>
+  );
+};
 
 const DeltaSharing: FC = () => {
   const classes = useStyles();
@@ -57,8 +146,13 @@ const DeltaSharing: FC = () => {
   return (
     <main className={classes.container}>
       <ResizePanel initialWidth={300} minWidth={200}>
-        <ResizeContent>
-          <div></div>
+        <ResizeContent className={classes.resizeContent}>
+          <ServiceCard
+            name="Sharing Server"
+            description="Awesome data to share"
+            url="http://localhost:8080"
+          />
+          <AddServiceCard />
         </ResizeContent>
         <ResizeHandleRight>
           <div className={classes.resizeHandle} />

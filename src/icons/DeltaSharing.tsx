@@ -1,18 +1,17 @@
 import { FC } from "react";
 import { IconProps } from "./props";
 
-export const DeltaSharingIcon: FC<IconProps> = ({
+export const DeltaSharingIcon: FC<{ id?: string; size?: number }> = ({
   id,
-  height,
-  width,
+  size,
 }): JSX.Element => {
   return (
     <svg
       id={id}
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
-      width={width || 42}
-      height={height || 42}
+      width={((size || 42) * 339) / 400}
+      height={size || 42}
       shapeRendering="geometricPrecision"
       textRendering="geometricPrecision"
       fillRule="evenodd"

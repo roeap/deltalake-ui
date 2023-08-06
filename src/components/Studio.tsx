@@ -58,7 +58,7 @@ export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
         </Tab>
         <Tab
           id="delta-sharing"
-          icon={<DeltaSharingIcon height={16} width={16} />}
+          icon={<DeltaSharingIcon size={20} />}
           value="/delta-sharing"
         >
           <Label>Delta Sharing</Label>
