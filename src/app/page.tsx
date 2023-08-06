@@ -1,6 +1,7 @@
 "use client";
 
-import { makeStyles, shorthands } from "@fluentui/react-components";
+import { useEffect, useState, type FC } from "react";
+import { makeStyles, shorthands, Label } from "@fluentui/react-components";
 
 import { AppearanceCard } from "@/components";
 
@@ -9,20 +10,46 @@ const useStyles = makeStyles({
     ...shorthands.padding("25px"),
     display: "flex",
     flexDirection: "column",
+    rowGap: "10px",
     alignItems: "start",
     justifyContent: "start",
     minHeight: 0,
     minWidth: 0,
     flexGrow: 1,
   },
+  rowContainer: {
+    ...shorthands.padding("10px"),
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    minHeight: 0,
+    minWidth: 0,
+    columnGap: "25px",
+  },
 });
 
+const RowContainer: FC<{ children: React.ReactNode; label: string }> = ({
+  label,
+  children,
+}) => {
+  const classes = useStyles();
+  return (
+    <>
+      <Label size="large">{label}</Label>
+      <div className={classes.rowContainer}>{children}</div>
+    </>
+  );
+};
+
 export default function Home(): JSX.Element {
-  const styles = useStyles();
+  const classes = useStyles();
 
   return (
-    <main className={styles.container}>
-      <AppearanceCard />
+    <main className={classes.container}>
+      <RowContainer label="Appearance">
+        <AppearanceCard />
+      </RowContainer>
     </main>
   );
 }

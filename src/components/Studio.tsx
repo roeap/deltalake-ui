@@ -57,13 +57,6 @@ export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
           </Label>
         </Tab>
         <Tab
-          id="network"
-          icon={<ArrowRoutingRectangleMultiple24Regular />}
-          value="/network"
-        >
-          <Label>Network</Label>
-        </Tab>
-        <Tab
           id="delta-sharing"
           icon={<DeltaSharingIcon height={16} width={16} />}
           value="/delta-sharing"

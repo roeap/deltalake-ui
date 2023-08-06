@@ -1,44 +1,23 @@
 import {
-  Button,
   makeStyles,
-  shorthands,
   Radio,
-  Label,
-  useId,
   Text,
   Card,
   CardHeader,
   CardPreview,
-  CardFooter,
-  Input,
-  InputProps,
-  Slider,
-  Switch,
   RadioGroup,
   RadioGroupProps,
   tokens,
   Field,
 } from "@fluentui/react-components";
-import {
-  TextEditStyle24Regular,
-  CloudOff24Regular,
-  CloudCheckmark24Regular,
-  ContentSettings24Regular,
-} from "@fluentui/react-icons";
+import { TextEditStyle24Regular } from "@fluentui/react-icons";
 
 import { useThemeContext } from "@/components";
 
 const useStyles = makeStyles({
-  root: {
-    ...shorthands.padding("15px", "15px", "15px", "15px"),
-    display: "flex",
-    flexDirection: "column",
-    rowGap: "25px",
-    flexGrow: 1,
-  },
   footer: { justifyContent: "flex-end" },
   iconConnected: { color: tokens.colorPaletteLightGreenForeground3 },
-  preview: { paddingLeft: "24px", rowGap: "100px" },
+  preview: { paddingLeft: "24px", paddingRight: "24px", rowGap: "100px" },
 });
 
 export const AppearanceCard: React.FC = () => {
@@ -52,10 +31,10 @@ export const AppearanceCard: React.FC = () => {
     <Card>
       <CardHeader
         image={<TextEditStyle24Regular />}
-        header={<Text>Appearance</Text>}
+        header={<Text>Theme</Text>}
       />
       <CardPreview className={classes.preview}>
-        <Field label="App theme">
+        <Field>
           <RadioGroup
             layout="horizontal-stacked"
             value={theme}
