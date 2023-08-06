@@ -12,7 +12,7 @@ import {
   Text,
   Caption1,
 } from "@fluentui/react-components";
-import { AddRegular, ServerRegular } from "@fluentui/react-icons";
+import { AddRegular } from "@fluentui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 
 import { DeltaSharingClient } from "@/clients";
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
     height: "100%",
     borderRightWidth: "1px",
     borderRightStyle: "solid",
-    borderRightColor: tokens.colorNeutralBackground1Hover,
+    borderRightColor: tokens.colorNeutralForeground4,
     boxSizing: "border-box",
     ":hover": {
       backgroundColor: tokens.colorBrandForeground1,
@@ -63,7 +63,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     rowGap: tokens.spacingVerticalL,
-    ...shorthands.padding(tokens.spacingVerticalXL),
+    ...shorthands.padding(tokens.spacingVerticalL),
   },
   horizontalCardImage: {
     width: "76px",
