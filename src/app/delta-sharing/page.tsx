@@ -16,6 +16,8 @@ import {
 
 import { AddServerCard } from "./AddServerCard";
 import { DeltaServerCard } from "./DeltaServerCard";
+import { SharingServerDetails, SharingContext } from "@/components";
+import { DeltaSharingClient } from "@/clients";
 
 const useStyles = makeStyles({
   root: {
@@ -24,17 +26,10 @@ const useStyles = makeStyles({
     flexGrow: 1,
     backgroundColor: tokens.colorNeutralBackground3,
   },
-  content: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
-    ...shorthands.flex(1),
-    backgroundColor: tokens.colorNeutralBackground4,
-  },
-  resizeHeader: {
+  drawerHeader: {
     backgroundColor: tokens.colorNeutralBackground3,
   },
-  resizeContent: {
+  drawerContent: {
     display: "flex",
     flexDirection: "column",
     rowGap: tokens.spacingVerticalL,
@@ -63,24 +58,25 @@ const useStyles = makeStyles({
   },
 });
 
+const servers = {
+  "1": {
+    name: "Production data",
+    description: "Awesome data to share",
+    url: "http://localhost:8080",
+  },
+  "2": {
+    name: "Business data",
+    description: "Awesome data to share",
+    url: "http://localhost:8080",
+  },
+};
+
 const DeltaSharing: FC = () => {
   const styles = useStyles();
-  // const [client] = useState(
-  //   new DeltaSharingClient({ baseUrl: "http://localhost:8080" })
-  // );
-  // const { data } = useQuery({
-  //   queryKey: ["login"],
-  //   queryFn: async ({ signal }) => {
-  //     return client.login(
-  //       { account: "delta", password: "password" },
-  //       { signal }
-  //     );
-  //   },
-  // });
 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState(420);
+  const [sidebarWidth, setSidebarWidth] = useState(360);
 
   const startResizing = useCallback(() => setIsResizing(true), []);
   const stopResizing = useCallback(() => setIsResizing(false), []);
@@ -109,38 +105,73 @@ const DeltaSharing: FC = () => {
     };
   }, [resize, stopResizing]);
 
+  const [client] = useState(
+    new DeltaSharingClient({ baseUrl: "http://localhost:8080" })
+  );
+  const [selected, setSelected] = useState<string | undefined>(undefined);
+  const [token, setToken] = useState<string>("");
+
+  useEffect(() => {
+    const login = async () => {
+      const profile = await client.login({
+        account: "delta",
+        password: "password",
+      });
+      setToken(profile.profile.bearerToken);
+    };
+    login();
+  }, [client]);
+
+  // const { data } = useQuery({
+  //   queryKey: ["login"],
+  //   queryFn: async ({ signal }) => {
+  //     return client.login(
+  //       { account: "delta", password: "password" },
+  //       { signal }
+  //     );
+  //   },
+  // });
+
   return (
-    <main className={styles.root}>
-      <DrawerInline
-        open
-        ref={sidebarRef}
-        style={{ width: `${sidebarWidth}px` }}
-        onMouseDown={(e) => e.preventDefault()}
-      >
-        <div
-          className={mergeClasses(
-            styles.drawerResizer,
-            isResizing && styles.drawerResizing
-          )}
-          onMouseDown={startResizing}
-        />
-
-        <DrawerHeader className={styles.resizeHeader}>
-          <DrawerHeaderTitle>Sharing Servers</DrawerHeaderTitle>
-        </DrawerHeader>
-
-        <DrawerBody className={styles.resizeContent}>
-          <DeltaServerCard
-            name="Sharing Server"
-            description="Awesome data to share"
-            url="http://localhost:8080"
+    <SharingContext.Provider value={{ client, credential: () => token }}>
+      <main className={styles.root}>
+        <DrawerInline
+          open
+          ref={sidebarRef}
+          style={{ width: `${sidebarWidth}px` }}
+          onMouseDown={(e) => e.preventDefault()}
+        >
+          <div
+            className={mergeClasses(
+              styles.drawerResizer,
+              isResizing && styles.drawerResizing
+            )}
+            onMouseDown={startResizing}
           />
-          <AddServerCard />
-        </DrawerBody>
-      </DrawerInline>
 
-      <div className={styles.content}></div>
-    </main>
+          <DrawerHeader className={styles.drawerHeader}>
+            <DrawerHeaderTitle>Sharing Servers</DrawerHeaderTitle>
+          </DrawerHeader>
+
+          <DrawerBody className={styles.drawerContent}>
+            {Object.entries(servers).map(([id, server]) => (
+              <DeltaServerCard
+                key={id}
+                id={id}
+                name={server.name}
+                description={server.description}
+                url={server.url}
+                selected={selected}
+                onClick={setSelected}
+              />
+            ))}
+            <AddServerCard />
+          </DrawerBody>
+        </DrawerInline>
+
+        <SharingServerDetails />
+      </main>
+    </SharingContext.Provider>
   );
 };
 

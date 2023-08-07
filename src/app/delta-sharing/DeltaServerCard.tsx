@@ -7,9 +7,9 @@ import {
   tokens,
   Card,
   CardPreview,
-  mergeClasses,
   Text,
   Caption1,
+  CardProps,
 } from "@fluentui/react-components";
 
 import { DeltaSharingIcon } from "@/icons";
@@ -30,25 +30,34 @@ const useStyles = makeStyles({
 });
 
 type SharingServerProps = {
+  id: string;
   name: string;
   description: string;
   url: string;
+  selected?: string;
+  onClick: (name: string) => void;
 };
 
 export const DeltaServerCard: FC<SharingServerProps> = ({
+  id,
   name,
   description,
+  selected,
+  onClick,
 }) => {
   const classes = useStyles();
-  const onClick = useCallback(() => console.log("Interactive!"), []);
+  const onClickInternal: CardProps["onSelectionChange"] = useCallback(
+    () => onClick(id),
+    [id, onClick]
+  );
 
   return (
     <Card
-      className={mergeClasses(classes.cardBody)}
+      className={classes.cardBody}
       appearance="filled"
-      onClick={onClick}
-      selected={true}
+      selected={selected === id}
       orientation="horizontal"
+      onSelectionChange={onClickInternal}
     >
       <CardPreview className={classes.horizontalCardImage}>
         <DeltaSharingIcon />

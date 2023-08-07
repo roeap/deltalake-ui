@@ -8,6 +8,13 @@ type LoginrequestOptions = {
   signal?: AbortSignal;
 };
 
+export type Profile = {
+  bearerToken: string;
+  endpoint: string;
+  expirationTime: string;
+  shareCredentialsVersion: number;
+};
+
 export class DeltaSharingClient {
   private readonly client;
 
