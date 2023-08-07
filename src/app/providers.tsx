@@ -20,8 +20,8 @@ const queryClient = new QueryClient();
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: tokens.colorBrandBackground2,
     fontFamily: "Fira Code",
+    backgroundColor: tokens.colorNeutralBackground1,
   },
 });
 

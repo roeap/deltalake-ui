@@ -1,164 +1,145 @@
 "use client";
 
-import { useState, type FC, useCallback } from "react";
+import { useState, type FC, useCallback, useRef, useEffect } from "react";
 import {
   makeStyles,
   shorthands,
-  CardHeader,
   tokens,
-  Card,
-  CardPreview,
   mergeClasses,
-  Text,
-  Caption1,
 } from "@fluentui/react-components";
-import { AddRegular } from "@fluentui/react-icons";
-import { useQuery } from "@tanstack/react-query";
+import {
+  DrawerBody,
+  DrawerHeader,
+  DrawerHeaderTitle,
+  DrawerInline,
+} from "@fluentui/react-components/unstable";
 
-import { DeltaSharingClient } from "@/clients";
-import { DeltaSharingIcon } from "@/icons";
-import { ResizeContent, ResizeHandleRight, ResizePanel } from "@/components";
+import { AddServerCard } from "./AddServerCard";
+import { DeltaServerCard } from "./DeltaServerCard";
 
 const useStyles = makeStyles({
-  container: {
+  root: {
     display: "flex",
     flexDirection: "row",
     flexGrow: 1,
+    backgroundColor: tokens.colorNeutralBackground3,
   },
-  main: {
+  content: {
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    flexGrow: 1,
+    ...shorthands.flex(1),
+    backgroundColor: tokens.colorNeutralBackground4,
   },
-  resizeHandle: {
-    cursor: "col-resize",
-    width: "3px",
-    height: "100%",
-    borderRightWidth: "1px",
-    borderRightStyle: "solid",
-    borderRightColor: tokens.colorNeutralForeground4,
-    boxSizing: "border-box",
-    ":hover": {
-      backgroundColor: tokens.colorBrandForeground1,
-    },
-  },
-  cardHeader: {
-    height: "25px",
-    width: "100%",
-    borderBottomStyle: "solid",
-    borderBottomWidth: tokens.strokeWidthThin,
-    borderBottomColor: tokens.colorNeutralForeground3,
-  },
-  cardBody: { height: "fit-content", width: "100%" },
-  cardBodyEmpty: {
-    height: "70px",
-    alignItems: "center",
-    justifyContent: "center",
-    ...shorthands.borderStyle("dashed"),
-    ...shorthands.borderWidth(tokens.strokeWidthThin),
-    ...shorthands.borderColor(tokens.colorNeutralForeground3),
+  resizeHeader: {
+    backgroundColor: tokens.colorNeutralBackground3,
   },
   resizeContent: {
     display: "flex",
     flexDirection: "column",
     rowGap: tokens.spacingVerticalL,
     ...shorthands.padding(tokens.spacingVerticalL),
+    backgroundColor: tokens.colorNeutralBackground3,
   },
-  horizontalCardImage: {
-    width: "76px",
-    height: "69px",
-    display: "flex",
-    alignContent: "center",
-    justifyContent: "center",
-    paddingTop: "5px",
+  drawerResizer: {
+    ...shorthands.borderRight("1px", "solid", tokens.colorNeutralBackground6),
+
+    width: "8px",
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    cursor: "col-resize",
+    resize: "horizontal",
+
+    ":hover": {
+      borderRightWidth: "4px",
+      borderRightColor: tokens.colorBrandForeground1,
+    },
   },
-  caption: {
-    color: tokens.colorNeutralForeground3,
+  drawerResizing: {
+    borderRightWidth: "4px",
+    borderRightColor: tokens.colorBrandForeground1,
   },
 });
 
-type SharingServerProps = {
-  name: string;
-  description: string;
-  url: string;
-};
-
-export const ServiceCard: FC<SharingServerProps> = ({ name, description }) => {
-  const classes = useStyles();
-  const onClick = useCallback(() => console.log("Interactive!"), []);
-
-  return (
-    <Card
-      className={mergeClasses(classes.cardBody)}
-      appearance="filled-alternative"
-      onClick={onClick}
-      selected={true}
-      orientation="horizontal"
-    >
-      <CardPreview className={classes.horizontalCardImage}>
-        <DeltaSharingIcon />
-      </CardPreview>
-      <CardHeader
-        header={<Text weight="semibold">{name}</Text>}
-        description={
-          <Caption1 className={classes.caption}>{description}</Caption1>
-        }
-      />
-    </Card>
-  );
-};
-
-export const AddServiceCard: FC = () => {
-  const classes = useStyles();
-  const onClick = useCallback(() => console.log("Interactive!"), []);
-
-  return (
-    <Card
-      className={mergeClasses(classes.cardBody, classes.cardBodyEmpty)}
-      appearance="subtle"
-      onClick={onClick}
-    >
-      <CardPreview>
-        <AddRegular
-          style={{ color: tokens.colorNeutralForeground3, fontSize: "62px" }}
-        />
-      </CardPreview>
-    </Card>
-  );
-};
-
 const DeltaSharing: FC = () => {
-  const classes = useStyles();
-  const [client] = useState(
-    new DeltaSharingClient({ baseUrl: "http://localhost:8080" })
-  );
-  const { data } = useQuery({
-    queryKey: ["login"],
-    queryFn: async ({ signal }) => {
-      return client.login(
-        { account: "delta", password: "password" },
-        { signal }
-      );
+  const styles = useStyles();
+  // const [client] = useState(
+  //   new DeltaSharingClient({ baseUrl: "http://localhost:8080" })
+  // );
+  // const { data } = useQuery({
+  //   queryKey: ["login"],
+  //   queryFn: async ({ signal }) => {
+  //     return client.login(
+  //       { account: "delta", password: "password" },
+  //       { signal }
+  //     );
+  //   },
+  // });
+
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [isResizing, setIsResizing] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(420);
+
+  const startResizing = useCallback(() => setIsResizing(true), []);
+  const stopResizing = useCallback(() => setIsResizing(false), []);
+
+  const resize: (ev: MouseEvent) => void = useCallback(
+    (ev) => {
+      const { clientX } = ev;
+      requestAnimationFrame(() => {
+        if (isResizing && sidebarRef.current) {
+          setSidebarWidth(
+            clientX - sidebarRef.current.getBoundingClientRect().left
+          );
+        }
+      });
     },
-  });
+    [isResizing]
+  );
+
+  useEffect(() => {
+    window.addEventListener("mousemove", resize);
+    window.addEventListener("mouseup", stopResizing);
+
+    return () => {
+      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mouseup", stopResizing);
+    };
+  }, [resize, stopResizing]);
 
   return (
-    <main className={classes.container}>
-      <ResizePanel initialWidth={300} minWidth={200}>
-        <ResizeContent className={classes.resizeContent}>
-          <ServiceCard
+    <main className={styles.root}>
+      <DrawerInline
+        open
+        ref={sidebarRef}
+        style={{ width: `${sidebarWidth}px` }}
+        onMouseDown={(e) => e.preventDefault()}
+      >
+        <div
+          className={mergeClasses(
+            styles.drawerResizer,
+            isResizing && styles.drawerResizing
+          )}
+          onMouseDown={startResizing}
+        />
+
+        <DrawerHeader className={styles.resizeHeader}>
+          <DrawerHeaderTitle>Sharing Servers</DrawerHeaderTitle>
+        </DrawerHeader>
+
+        <DrawerBody className={styles.resizeContent}>
+          <DeltaServerCard
             name="Sharing Server"
             description="Awesome data to share"
             url="http://localhost:8080"
           />
-          <AddServiceCard />
-        </ResizeContent>
-        <ResizeHandleRight>
-          <div className={classes.resizeHandle} />
-        </ResizeHandleRight>
-      </ResizePanel>
-      <div className={classes.main}></div>
+          <AddServerCard />
+        </DrawerBody>
+      </DrawerInline>
+
+      <div className={styles.content}></div>
     </main>
   );
 };

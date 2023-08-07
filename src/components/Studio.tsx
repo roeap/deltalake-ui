@@ -8,15 +8,13 @@ import {
   TabListProps,
   makeStyles,
   tokens,
-  Title3,
+  shorthands,
 } from "@fluentui/react-components";
 import { useRouter } from "next/navigation";
-import { ErrorBoundary, FallbackProps } from "react-error-boundary";
+import { ErrorBoundary } from "react-error-boundary";
 
-import { Loading } from "@/components";
+import { Loading, ErrorFallback, Header } from "@/components";
 import { DeltalakeIcon, GraphQLIcon, DeltaSharingIcon } from "@/icons";
-
-const TAB_NAV_HEIGHT = "64px";
 
 const useStyles = makeStyles({
   root: {
@@ -27,58 +25,29 @@ const useStyles = makeStyles({
     fontFamily: "Fira Code, monospace",
     overflowX: "hidden",
     overflowY: "hidden",
+    display: "flex",
+    flexDirection: "column",
   },
   body: {
-    height: `calc(100vh - ${TAB_NAV_HEIGHT})`,
     widht: "100%",
     display: "flex",
     flexDirection: "row",
+    ...shorthands.flex(1),
   },
   content: {
-    height: `calc(100vh - ${TAB_NAV_HEIGHT})`,
+    height: "100%",
     display: "flex",
     flexGrow: 1,
   },
   sidebar: {
-    height: `calc(100vh - ${TAB_NAV_HEIGHT})`,
+    height: "100%",
     width: "68px",
     borderRightWidth: "1px",
     borderRightStyle: "solid",
-    borderRightColor: tokens.colorNeutralForeground4,
+    borderRightColor: tokens.colorNeutralBackground6,
+    backgroundColor: tokens.colorNeutralBackground4,
   },
-  header: {
-    height: TAB_NAV_HEIGHT,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "start",
-    paddingLeft: tokens.spacingVerticalL,
-    borderBottomWidth: "1px",
-    borderBottomStyle: "solid",
-    borderBottomColor: tokens.colorNeutralForeground4,
-  },
-  firaLabel: { fontFamily: "Fira Code, monospace" },
-  connected: { color: tokens.colorPaletteLightGreenForeground1 },
 });
-
-const Header: FC = () => {
-  const styles = useStyles();
-  return (
-    <div className={styles.header}>
-      <Title3 className={styles.firaLabel}>Lakehouse Studio</Title3>
-    </div>
-  );
-};
-
-const ErrorFallback: FC<FallbackProps> = ({ error }) => {
-  // Call resetErrorBoundary() to reset the error boundary and retry the render.
-
-  return (
-    <div role="alert">
-      <p>Something went wrong:</p>
-      <pre style={{ color: "red" }}>{error.message}</pre>
-    </div>
-  );
-};
 
 export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
   const classes = useStyles();
