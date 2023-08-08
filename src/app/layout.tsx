@@ -3,9 +3,6 @@ import { Providers } from "./providers";
 import { Fira_Code } from "next/font/google";
 
 interface metadata {
-  /**
-   * Page title
-   */
   title: string;
   description: string;
 }

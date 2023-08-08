@@ -1,6 +1,7 @@
 "use client";
 
 import { type FC, useCallback } from "react";
+import Link from "next/link";
 import {
   makeStyles,
   CardHeader,
@@ -52,22 +53,24 @@ export const DeltaServerCard: FC<SharingServerProps> = ({
   );
 
   return (
-    <Card
-      className={classes.cardBody}
-      appearance="filled"
-      selected={selected === id}
-      orientation="horizontal"
-      onSelectionChange={onSelectionChange}
-    >
-      <CardPreview className={classes.horizontalCardImage}>
-        <DeltaSharingIcon />
-      </CardPreview>
-      <CardHeader
-        header={<Text weight="semibold">{name}</Text>}
-        description={
-          <Caption1 className={classes.caption}>{description}</Caption1>
-        }
-      />
-    </Card>
+    <Link href={`/delta-sharing/${id}`}>
+      <Card
+        className={classes.cardBody}
+        appearance="filled"
+        selected={selected === id}
+        orientation="horizontal"
+        onSelectionChange={onSelectionChange}
+      >
+        <CardPreview className={classes.horizontalCardImage}>
+          <DeltaSharingIcon />
+        </CardPreview>
+        <CardHeader
+          header={<Text weight="semibold">{name}</Text>}
+          description={
+            <Caption1 className={classes.caption}>{description}</Caption1>
+          }
+        />
+      </Card>
+    </Link>
   );
 };
