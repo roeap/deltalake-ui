@@ -1,15 +1,19 @@
 "use client";
 
-import { FC } from "react";
-import { makeStyles, tokens, Title3 } from "@fluentui/react-components";
+import { FC, useState } from "react";
+import { makeStyles, tokens, Title3, Switch } from "@fluentui/react-components";
+import DarkModeToggle from "react-dark-mode-toggle";
+
+import { useThemeContext } from "./ThemeProvider";
 
 const useStyles = makeStyles({
   header: {
     height: "64px",
     display: "flex",
     alignItems: "center",
-    justifyContent: "start",
+    justifyContent: "space-between",
     paddingLeft: tokens.spacingVerticalL,
+    paddingRight: tokens.spacingVerticalL,
     backgroundColor: tokens.colorBrandBackground,
     borderBottomWidth: "1px",
     borderBottomStyle: "solid",
@@ -20,9 +24,15 @@ const useStyles = makeStyles({
 
 export const Header: FC = () => {
   const styles = useStyles();
+  const { theme, setTheme } = useThemeContext();
   return (
     <div className={styles.header}>
       <Title3 className={styles.firaLabel}>Lakehouse Studio</Title3>
+      <DarkModeToggle
+        onChange={(checked) => setTheme(checked ? "dark" : "light")}
+        checked={theme === "dark"}
+        size={56}
+      />
     </div>
   );
 };

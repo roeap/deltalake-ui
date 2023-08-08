@@ -3,8 +3,6 @@
 import { type FC } from "react";
 import { makeStyles, shorthands, Label } from "@fluentui/react-components";
 
-import { AppearanceCard, AddServiceCard } from "@/components";
-
 const useStyles = makeStyles({
   container: {
     ...shorthands.padding("25px"),
@@ -45,14 +43,5 @@ const RowContainer: FC<{ children: React.ReactNode; label: string }> = ({
 export default function Home(): JSX.Element {
   const classes = useStyles();
 
-  return (
-    <main className={classes.container}>
-      <RowContainer label="Appearance">
-        <AppearanceCard />
-      </RowContainer>
-      <RowContainer label="Sharing Servers">
-        <AddServiceCard />
-      </RowContainer>
-    </main>
-  );
+  return <main className={classes.container}></main>;
 }

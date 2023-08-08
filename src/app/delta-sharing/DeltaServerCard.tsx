@@ -46,7 +46,7 @@ export const DeltaServerCard: FC<SharingServerProps> = ({
   onClick,
 }) => {
   const classes = useStyles();
-  const onClickInternal: CardProps["onSelectionChange"] = useCallback(
+  const onSelectionChange: CardProps["onSelectionChange"] = useCallback(
     () => onClick(id),
     [id, onClick]
   );
@@ -57,7 +57,7 @@ export const DeltaServerCard: FC<SharingServerProps> = ({
       appearance="filled"
       selected={selected === id}
       orientation="horizontal"
-      onSelectionChange={onClickInternal}
+      onSelectionChange={onSelectionChange}
     >
       <CardPreview className={classes.horizontalCardImage}>
         <DeltaSharingIcon />
