@@ -24,7 +24,7 @@ export type LoadingProps = {
     | "huge";
 };
 
-export const Loading: FC<LoadingProps> = ({ spinnerSize }) => {
+export const Loading: FC<LoadingProps> = ({ spinnerSize = "medium" }) => {
   const classes = useStyles();
 
   return (
@@ -33,7 +33,5 @@ export const Loading: FC<LoadingProps> = ({ spinnerSize }) => {
     </div>
   );
 };
-
-Loading.defaultProps = { spinnerSize: "medium" };
 
 export default Loading;

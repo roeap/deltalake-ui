@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-import { SharingServerContext } from "@/components";
+import { SharingServerContext, SharingServerDetails } from "@/components";
 import { DeltaSharingClient } from "@/clients";
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -24,7 +24,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <SharingServerContext.Provider value={{ client, credential: () => token }}>
-      <div>My Post: {params.id}</div>
+      {token && <SharingServerDetails />}
     </SharingServerContext.Provider>
   );
 }

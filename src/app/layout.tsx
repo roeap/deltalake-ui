@@ -17,10 +17,6 @@ export const metadata = {
   description: "A utility for exploring tables maintained in a Deltalake.",
 };
 
-/**
- * RootLayout component
- * Wraps the entire application with the necessary providers
- */
 export default function RootLayout({
   children,
 }: {

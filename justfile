@@ -3,3 +3,6 @@ generate-sharing-types:
 
 compose:
   docker compose -f compose.yaml -p deltalake up -d
+
+dev:
+  npm run dev
