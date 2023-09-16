@@ -28,6 +28,8 @@ services:
     #   - ~/.aws/credentials:/.aws/credentials
     #   - ~/.gcp/service-account-file.json:/.gcp/service-account-file.json
     command: server
+    networks:
+      - delta
 
   shares-store:
     image: postgres:alpine
@@ -36,3 +38,22 @@ services:
       - POSTGRES_DB=sharing
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=secret
+    networks:
+      - delta
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - 1478:80
+    depends_on:
+      - shares-store
+    networks:
+      - delta
+
+networks:
+  delta:
+    driver: bridge

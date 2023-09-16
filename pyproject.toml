@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "deltalake-ui"
+version = "0.1.0"
+description = ""
+authors = ["Robert Pack <robstar.pack@gmail.com>"]
+readme = "README.md"
+packages = [{include = "deltalake_ui"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+ipykernel = "^6.25.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
