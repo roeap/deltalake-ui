@@ -13,7 +13,8 @@ import {
   tokens,
 } from "@fluentui/react-components";
 
-import { Studio, ThemeProvider, useThemeContext } from "@/components";
+import { Studio } from "./Studio";
+import { ThemeProvider, useThemeContext } from "@/components";
 
 const renderer = createDOMRenderer();
 const queryClient = new QueryClient({

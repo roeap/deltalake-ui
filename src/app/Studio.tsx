@@ -10,8 +10,9 @@ import {
   tokens,
   shorthands,
 } from "@fluentui/react-components";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { ErrorBoundary } from "react-error-boundary";
+import Link from "next/link";
 
 import { Loading, ErrorFallback, Header } from "@/components";
 import { DeltalakeIcon, GraphQLIcon, DeltaSharingIcon } from "@/icons";
@@ -51,13 +52,10 @@ const useStyles = makeStyles({
 
 export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
   const classes = useStyles();
-  const router = useRouter();
-  const [selectedValue, setSelectedValue] = useState("/");
+  const pathname = usePathname();
 
-  const onTabSelect: TabListProps["onTabSelect"] = (_event, data) => {
-    setSelectedValue(data.value as string);
-    router.push(data.value as string);
-  };
+  const segments = pathname.split("/");
+  const rootPath = segments.length < 2 ? "/" : `/${segments[1]}`;
 
   return (
     <div className={classes.root}>
@@ -67,34 +65,32 @@ export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
           <TabList
             size="large"
             vertical
-            selectedValue={selectedValue}
-            onTabSelect={onTabSelect}
-            defaultValue={"/"}
+            selectedValue={rootPath}
+            role="navigation"
           >
-            <Tab id="studio" value="/">
-              <SettingsRegular fontSize={38} />
-            </Tab>
-            <Tab
-              id="delta-sharing"
-              value="/delta-sharing"
-              style={{ height: "64px", width: "64px", paddingBottom: 0 }}
-            >
-              <DeltaSharingIcon size={45} />
-            </Tab>
-            <Tab
-              id="delta"
-              value="/delta"
-              style={{ height: "64px", width: "64px", paddingBottom: 4 }}
-            >
-              <DeltalakeIcon height={38} width={38} />
-            </Tab>
-            <Tab
-              id="graphql"
-              value="/graphql"
-              style={{ height: "64px", width: "64px", paddingBottom: 4 }}
-            >
-              <GraphQLIcon height={38} width={38} />
-            </Tab>
+            <Link href={"/"}>
+              <Tab id="studio" value="/">
+                <SettingsRegular fontSize={38} />
+              </Tab>
+            </Link>
+            <Link href={"/delta-sharing"}>
+              <Tab
+                id="delta-sharing"
+                value="/delta-sharing"
+                style={{ height: "64px", width: "64px", paddingBottom: 0 }}
+              >
+                <DeltaSharingIcon size={45} />
+              </Tab>
+            </Link>
+            <Link href={"/delta"}>
+              <Tab
+                id="delta"
+                value="/delta"
+                style={{ height: "64px", width: "64px", paddingBottom: 4 }}
+              >
+                <DeltalakeIcon height={38} width={38} />
+              </Tab>
+            </Link>
           </TabList>
         </div>
         <div className={classes.content}>
