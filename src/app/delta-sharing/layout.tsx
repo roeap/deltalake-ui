@@ -146,7 +146,6 @@ export default function SharingLayout({
             <AddServerCard />
           </DrawerBody>
         </DrawerInline>
-
         {children}
       </main>
     </SharingContext.Provider>

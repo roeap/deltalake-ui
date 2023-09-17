@@ -27,9 +27,6 @@ type CreateAccountRequestParams = paths["/admin/accounts"]["post"];
 export type Share = {
   id: string;
   name: string;
-  schema: string;
-  share: string;
-  shareId: string;
 };
 
 export class DeltaSharingClient {

@@ -20,9 +20,13 @@ const useStyles = makeStyles({
   },
 });
 
-export const SharingServerDetails: FC = () => {
+type SharingServerDetailsProps = {
+  id: string;
+};
+
+export const SharingServerDetails: FC<SharingServerDetailsProps> = ({ id }) => {
   const styles = useStyles();
-  const { id } = useServerInfo();
+  // const { id } = useServerInfo();
   const { client, credential } = useSharingServerContext();
 
   const { data } = useQuery({

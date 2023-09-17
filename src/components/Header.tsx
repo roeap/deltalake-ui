@@ -1,7 +1,7 @@
 "use client";
 
-import { FC, useState } from "react";
-import { makeStyles, tokens, Title3, Switch } from "@fluentui/react-components";
+import { FC } from "react";
+import { makeStyles, tokens, Title3 } from "@fluentui/react-components";
 import DarkModeToggle from "react-dark-mode-toggle";
 
 import { useThemeContext } from "./ThemeProvider";

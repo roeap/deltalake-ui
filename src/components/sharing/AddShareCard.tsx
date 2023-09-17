@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, useState } from "react";
+import { type FC, useState, Dispatch, SetStateAction } from "react";
 import {
   makeStyles,
   shorthands,
@@ -43,44 +43,53 @@ const useStyles = makeStyles({
   },
 });
 
-const AddShareDialog: FC<Omit<DialogProps, "children">> = (props) => {
-  const styles = useStyles();
+type AddShareDialogProps = {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+} & Omit<DialogProps, "children">;
+
+const AddShareDialog: FC<AddShareDialogProps> = ({
+  setOpen,
+  ...otherProps
+}) => {
+  const classes = useStyles();
   const { id } = useServerInfo();
   const { client, credential } = useSharingServerContext();
+  const [shareName, setShareName] = useState("");
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async () => {
-      console.log("creating");
-      const data = await client.createShare(
-        { id: "shareid", name: "sharename" },
-        { token: credential() }
-      );
-      console.log({ data });
+    mutationFn: async (name: string) => {
+      const data = await client.createShare({ name }, { token: credential() });
+      // TODO add toaster to show success
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shares", id] });
+      setOpen(false);
+      setShareName("");
     },
   });
 
   return (
-    <Dialog {...props}>
+    <Dialog {...otherProps}>
       <DialogSurface>
         <DialogBody>
           <DialogTitle>Add Share</DialogTitle>
-          <DialogContent className={styles.dialogBody}>
-            <Field label="ID" orientation="horizontal">
-              <Input />
-            </Field>
+          <DialogContent className={classes.dialogBody}>
             <Field label="Name" orientation="horizontal">
-              <Input />
+              <Input
+                value={shareName}
+                onChange={(_, data) => setShareName(data.value)}
+              />
             </Field>
           </DialogContent>
           <DialogActions>
             <DialogTrigger disableButtonEnhancement>
               <Button appearance="secondary">Cancel</Button>
             </DialogTrigger>
-            <Button appearance="primary" onClick={() => mutation.mutate()}>
+            <Button
+              appearance="primary"
+              onClick={() => mutation.mutate(shareName)}
+            >
               Create
             </Button>
           </DialogActions>
@@ -111,6 +120,7 @@ export const AddShareCard: FC = () => {
       </Card>
       <AddShareDialog
         open={open}
+        setOpen={setOpen}
         onOpenChange={(_event, data) => {
           setOpen(data.open);
         }}

@@ -42,7 +42,7 @@ export const ShareCard: FC<SharingServerProps> = ({ share }) => {
   const { id } = useServerInfo();
   const pathname = usePathname();
 
-  const href = `/delta-sharing/${id}/${share.id}`;
+  const href = `/delta-sharing/${id}/${share.name}`;
 
   return (
     <Link href={href}>
@@ -57,11 +57,11 @@ export const ShareCard: FC<SharingServerProps> = ({ share }) => {
         </CardPreview>
         <CardHeader
           header={<Text weight="semibold">{share.name}</Text>}
-          description={
-            <Caption1 className={classes.caption}>
-              {`${share.schema.length} schemas`}
-            </Caption1>
-          }
+          // description={
+          //   <Caption1 className={classes.caption}>
+          //     {`${share.schema.length} schemas`}
+          //   </Caption1>
+          // }
         />
       </Card>
     </Link>

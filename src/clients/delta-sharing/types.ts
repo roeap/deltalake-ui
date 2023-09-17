@@ -3,7 +3,6 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
   "/admin/accounts": {
     get: operations["list"];
@@ -20,13 +19,6 @@ export interface paths {
   };
   "/admin/shares": {
     post: operations["post"];
-  };
-  "/admin/tables": {
-    get: operations["list"];
-    post: operations["post"];
-  };
-  "/admin/tables/{table}": {
-    get: operations["get"];
   };
   "/shares": {
     get: operations["list"];
@@ -51,6 +43,9 @@ export interface paths {
   };
   "/shares/{share}/schemas/{schema}/tables/{table}/version": {
     get: operations["get"];
+  };
+  "admin/shares/{share}/schemas": {
+    post: operations["post"];
   };
   "admin/shares/{share}/schemas/{schema}/tables": {
     post: operations["post"];
@@ -98,32 +93,22 @@ export interface components {
       profile: components["schemas"]["Profile"];
     };
     AdminSharesPostRequest: {
-      id?: string | null;
       name: string;
     };
     AdminSharesPostResponse: {
       share: components["schemas"]["Share"];
     };
-    AdminSharesSchemasTablesPostRequest: {
-      id?: string | null;
-      table: string;
+    AdminSharesSchemasPostRequest: {
+      name: string;
     };
-    AdminSharesSchemasTablesPostResponse: {
+    AdminSharesSchemasPostResponse: {
       schema: components["schemas"]["Schema"];
     };
-    AdminTablesGetResponse: {
-      table: components["schemas"]["Table"];
-    };
-    AdminTablesListResponse: {
-      items: components["schemas"]["Table"][];
-      nextPageToken?: string | null;
-    };
-    AdminTablesPostRequest: {
-      id?: string | null;
+    AdminSharesSchemasTablesPostRequest: {
       location: string;
       name: string;
     };
-    AdminTablesPostResponse: {
+    AdminSharesSchemasTablesPostResponse: {
       table: components["schemas"]["Table"];
     };
     ErrorMessage: {
@@ -131,7 +116,18 @@ export interface components {
       message: string;
     };
     /** @enum {string} */
-    OpType: "column" | "literal" | "isNull" | "equal" | "lessThan" | "lessThanOrEqual" | "greaterThan" | "greaterThanOrEqual" | "and" | "or" | "not";
+    OpType:
+      | "column"
+      | "literal"
+      | "isNull"
+      | "equal"
+      | "lessThan"
+      | "lessThanOrEqual"
+      | "greaterThan"
+      | "greaterThanOrEqual"
+      | "and"
+      | "or"
+      | "not";
     PredicateJson: {
       children?: components["schemas"]["PredicateJson"][] | null;
       name?: string | null;
@@ -208,10 +204,11 @@ export interface components {
   pathItems: never;
 }
 
+export type $defs = Record<string, never>;
+
 export type external = Record<string, never>;
 
 export interface operations {
-
   list: {
     parameters: {
       query?: {
@@ -306,7 +303,9 @@ export interface operations {
   get: {
     responses: {
       /** @description The table version was successfully returned. */
-      200: never;
+      200: {
+        content: never;
+      };
       /** @description The request is malformed. */
       400: {
         content: {

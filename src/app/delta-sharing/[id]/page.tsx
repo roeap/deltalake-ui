@@ -6,6 +6,7 @@ import { SharingServerContext, SharingServerDetails } from "@/components";
 import { DeltaSharingClient } from "@/clients";
 
 export default function Page({ params }: { params: { id: string } }) {
+  const { id } = params;
   const [client] = useState(
     new DeltaSharingClient({ baseUrl: "http://localhost:8080" })
   );
@@ -24,7 +25,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <SharingServerContext.Provider value={{ client, credential: () => token }}>
-      {token && <SharingServerDetails />}
+      {token && <SharingServerDetails id={id} />}
     </SharingServerContext.Provider>
   );
 }
