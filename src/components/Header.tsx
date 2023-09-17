@@ -1,8 +1,17 @@
 "use client";
 
 import { FC } from "react";
-import { makeStyles, tokens, Title3 } from "@fluentui/react-components";
-import DarkModeToggle from "react-dark-mode-toggle";
+import {
+  makeStyles,
+  tokens,
+  Title3,
+  Tooltip,
+  ToggleButton,
+} from "@fluentui/react-components";
+import {
+  LightbulbFilament24Regular,
+  LightbulbFilament24Filled,
+} from "@fluentui/react-icons";
 
 import { useThemeContext } from "./ThemeProvider";
 
@@ -25,14 +34,26 @@ const useStyles = makeStyles({
 export const Header: FC = () => {
   const styles = useStyles();
   const { theme, setTheme } = useThemeContext();
+
   return (
     <div className={styles.header}>
       <Title3 className={styles.firaLabel}>Lakehouse Studio</Title3>
-      <DarkModeToggle
-        onChange={(checked) => setTheme(checked ? "dark" : "light")}
-        checked={theme === "dark"}
-        size={56}
-      />
+      <Tooltip content="Toggle dark mode." relationship="label">
+        <ToggleButton
+          checked={theme === "dark"}
+          appearance="transparent"
+          icon={
+            theme === "dark" ? (
+              <LightbulbFilament24Filled />
+            ) : (
+              <LightbulbFilament24Regular />
+            )
+          }
+          onClick={() =>
+            theme === "dark" ? setTheme("light") : setTheme("dark")
+          }
+        />
+      </Tooltip>
     </div>
   );
 };
