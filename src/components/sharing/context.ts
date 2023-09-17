@@ -32,9 +32,7 @@ export const SharingServerContext = createContext<SharingServerContextProps>({
 
 export const useSharingServerContext = () => useContext(SharingServerContext);
 
-export const useServerInfo = () => {
-  const pathname = usePathname();
+export const useServerInfo = (id: string) => {
   const { servers } = useSharingContext();
-  const id = pathname.split("/")[2];
-  return { id, server: servers[id] };
+  return { server: servers[id] };
 };

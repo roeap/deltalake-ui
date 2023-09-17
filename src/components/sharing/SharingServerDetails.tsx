@@ -5,7 +5,6 @@ import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useQuery } from "@tanstack/react-query";
 
 import { useSharingServerContext } from "./context";
-import { useServerInfo } from "@/components";
 import { ShareCard } from "./ShareCard";
 import { AddShareCard } from "./AddShareCard";
 
@@ -26,7 +25,6 @@ type SharingServerDetailsProps = {
 
 export const SharingServerDetails: FC<SharingServerDetailsProps> = ({ id }) => {
   const styles = useStyles();
-  // const { id } = useServerInfo();
   const { client, credential } = useSharingServerContext();
 
   const { data } = useQuery({
@@ -43,7 +41,7 @@ export const SharingServerDetails: FC<SharingServerDetailsProps> = ({ id }) => {
       {data?.map((share) => (
         <ShareCard key={share.id} share={share} />
       ))}
-      <AddShareCard />
+      <AddShareCard serverId={id} />
     </div>
   );
 };

@@ -23,7 +23,7 @@ import {
 import { AddRegular } from "@fluentui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { useSharingServerContext, useServerInfo } from "./context";
+import { useSharingServerContext } from "./context";
 
 const useStyles = makeStyles({
   cardBody: {
@@ -45,14 +45,15 @@ const useStyles = makeStyles({
 
 type AddShareDialogProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
+  serverId: string;
 } & Omit<DialogProps, "children">;
 
 const AddShareDialog: FC<AddShareDialogProps> = ({
   setOpen,
+  serverId,
   ...otherProps
 }) => {
   const classes = useStyles();
-  const { id } = useServerInfo();
   const { client, credential } = useSharingServerContext();
   const [shareName, setShareName] = useState("");
   const queryClient = useQueryClient();
@@ -63,7 +64,7 @@ const AddShareDialog: FC<AddShareDialogProps> = ({
       // TODO add toaster to show success
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["shares", id] });
+      queryClient.invalidateQueries({ queryKey: ["shares", serverId] });
       setOpen(false);
       setShareName("");
     },
@@ -99,7 +100,11 @@ const AddShareDialog: FC<AddShareDialogProps> = ({
   );
 };
 
-export const AddShareCard: FC = () => {
+type AddShareCardProps = {
+  serverId: string;
+};
+
+export const AddShareCard: FC<AddShareCardProps> = ({ serverId }) => {
   const styles = useStyles();
   const [open, setOpen] = useState(false);
   const restoreFocusTargetAttribute = useRestoreFocusTarget();
@@ -124,6 +129,7 @@ export const AddShareCard: FC = () => {
         onOpenChange={(_event, data) => {
           setOpen(data.open);
         }}
+        serverId={serverId}
       />
     </>
   );
