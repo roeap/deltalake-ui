@@ -23,7 +23,7 @@ import {
 import { AddRegular } from "@fluentui/react-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { useSharingServerContext } from "./context";
+import { useSharingServerContext } from "../../../components/sharing/context";
 
 const useStyles = makeStyles({
   cardBody: {

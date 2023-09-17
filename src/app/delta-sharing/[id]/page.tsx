@@ -1,31 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { useQuery } from "@tanstack/react-query";
 
-import { SharingServerContext, SharingServerDetails } from "@/components";
-import { DeltaSharingClient } from "@/clients";
+import { useSharingServerContext } from "../../../components/sharing/context";
+import { ShareCard } from "./ShareCard";
+import { AddShareCard } from "./AddShareCard";
+
+const useStyles = makeStyles({
+  root: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    ...shorthands.flex(1),
+    backgroundColor: tokens.colorNeutralBackground4,
+    ...shorthands.padding(tokens.spacingVerticalM),
+  },
+});
 
 export default function Page({ params }: { params: { id: string } }) {
   const { id } = params;
-  const [client] = useState(
-    new DeltaSharingClient({ baseUrl: "http://localhost:8080" })
-  );
-  const [token, setToken] = useState<string>("");
+  const styles = useStyles();
+  const { client, credential } = useSharingServerContext();
 
-  useEffect(() => {
-    const login = async () => {
-      const profile = await client.login({
-        account: "delta",
-        password: "password",
-      });
-      setToken(profile.profile.bearerToken);
-    };
-    login();
-  }, [client]);
+  const { data } = useQuery({
+    queryKey: ["shares", id],
+    queryFn: async () => {
+      const data = await client.listShares({}, { token: credential() });
+      // TODO pagination
+      return data.items;
+    },
+  });
 
   return (
-    <SharingServerContext.Provider value={{ client, credential: () => token }}>
-      {token && <SharingServerDetails id={id} />}
-    </SharingServerContext.Provider>
+    <div className={styles.root}>
+      {data?.map((share) => (
+        <ShareCard key={share.id} share={share} />
+      ))}
+      <AddShareCard serverId={id} />
+    </div>
   );
 }
