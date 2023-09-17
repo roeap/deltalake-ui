@@ -1,35 +1,35 @@
 version: "3.9"
 services:
-  delta-sharing:
-    image: delta-sharing:local
-    restart: always
-    depends_on:
-      - shares-store
-    environment:
-      # - AWS_SHARED_CREDENTIALS_FILE=/.aws/credentials
-      # - AWS_PROFILE=delta-sharing
-      # - AWS_REGION=ap-northeast-1
-      # - GOOGLE_APPLICATION_CREDENTIALS=/.gcp/service-account-file.json
-      - DELTA_SHARING_RS_DB_URL=postgres://postgres:secret@shares-store:5432/sharing
-      - DELTA_SHARING_RS_SERVER_ADDR=http://127.0.0.1:8080
-      - DELTA_SHARING_RS_SERVER_BIND=0.0.0.0:8080
-      - DELTA_SHARING_RS_ADMIN_NAME=delta
-      - DELTA_SHARING_RS_ADMIN_EMAIL=delta@email.com
-      - DELTA_SHARING_RS_ADMIN_PASSWORD=password
-      - DELTA_SHARING_RS_ADMIN_NAMESPACE=delta
-      - DELTA_SHARING_RS_ADMIN_TTL=28800
-      - DELTA_SHARING_RS_SIGNED_URL_TTL=28800
-      - DELTA_SHARING_RS_JWT_SECRET=secret
-      - DELTA_SHARING_RS_USE_JSON_LOG=true
-      - DELTA_SHARING_RS_LOG_FILTER=warn,delta_sharing=info
-    ports:
-      - 8080:8080
-    # volumes:
-    #   - ~/.aws/credentials:/.aws/credentials
-    #   - ~/.gcp/service-account-file.json:/.gcp/service-account-file.json
-    command: server
-    networks:
-      - delta
+  # delta-sharing:
+  #   image: delta-sharing:local
+  #   restart: always
+  #   depends_on:
+  #     - shares-store
+  #   environment:
+  #     # - AWS_SHARED_CREDENTIALS_FILE=/.aws/credentials
+  #     # - AWS_PROFILE=delta-sharing
+  #     # - AWS_REGION=ap-northeast-1
+  #     # - GOOGLE_APPLICATION_CREDENTIALS=/.gcp/service-account-file.json
+  #     - DELTA_SHARING_RS_DB_URL=postgres://postgres:secret@shares-store:5432/sharing
+  #     - DELTA_SHARING_RS_SERVER_ADDR=http://127.0.0.1:8080
+  #     - DELTA_SHARING_RS_SERVER_BIND=0.0.0.0:8080
+  #     - DELTA_SHARING_RS_ADMIN_NAME=delta
+  #     - DELTA_SHARING_RS_ADMIN_EMAIL=delta@email.com
+  #     - DELTA_SHARING_RS_ADMIN_PASSWORD=password
+  #     - DELTA_SHARING_RS_ADMIN_NAMESPACE=delta
+  #     - DELTA_SHARING_RS_ADMIN_TTL=28800
+  #     - DELTA_SHARING_RS_SIGNED_URL_TTL=28800
+  #     - DELTA_SHARING_RS_JWT_SECRET=secret
+  #     - DELTA_SHARING_RS_USE_JSON_LOG=true
+  #     - DELTA_SHARING_RS_LOG_FILTER=warn,delta_sharing=info
+  #   ports:
+  #     - 8080:8080
+  #   # volumes:
+  #   #   - ~/.aws/credentials:/.aws/credentials
+  #   #   - ~/.gcp/service-account-file.json:/.gcp/service-account-file.json
+  #   command: server
+  #   networks:
+  #     - delta
 
   shares-store:
     image: postgres:alpine
@@ -40,19 +40,21 @@ services:
       - POSTGRES_PASSWORD=secret
     networks:
       - delta
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
-      PGADMIN_DEFAULT_PASSWORD: secret
-      PGADMIN_LISTEN_PORT: 80
     ports:
-      - 1478:80
-    depends_on:
-      - shares-store
-    networks:
-      - delta
+      - 5432:5432
+
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
+  #     PGADMIN_DEFAULT_PASSWORD: secret
+  #     PGADMIN_LISTEN_PORT: 80
+  #   ports:
+  #     - 1478:80
+  #   depends_on:
+  #     - shares-store
+  #   networks:
+  #     - delta
 
 networks:
   delta:
