@@ -1,7 +1,7 @@
 "use client";
 
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useSharingServerContext } from "../../../components/sharing/context";
 import { ShareCard } from "./ShareCard";
@@ -19,12 +19,11 @@ const useStyles = makeStyles({
 });
 
 export default function Page({ params }: { params: { id: string } }) {
-  const { id } = params;
   const styles = useStyles();
   const { client, credential } = useSharingServerContext();
 
-  const { data } = useQuery({
-    queryKey: ["shares", id],
+  const { data } = useSuspenseQuery({
+    queryKey: ["shares", params.id],
     queryFn: async () => {
       const data = await client.listShares({}, { token: credential() });
       // TODO pagination
@@ -35,9 +34,9 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className={styles.root}>
       {data?.map((share) => (
-        <ShareCard key={share.id} share={share} />
+        <ShareCard key={share.name} share={share} />
       ))}
-      <AddShareCard serverId={id} />
+      <AddShareCard serverId={params.id} />
     </div>
   );
 }

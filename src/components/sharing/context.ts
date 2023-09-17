@@ -32,7 +32,8 @@ export const SharingServerContext = createContext<SharingServerContextProps>({
 
 export const useSharingServerContext = () => useContext(SharingServerContext);
 
-export const useServerInfo = (id: string) => {
+export const useSharingServer = (id: string) => {
   const { servers } = useSharingContext();
-  return { server: servers[id] };
+  const client = new DeltaSharingClient({ baseUrl: "http://localhost:8080" });
+  return { info: servers[id], client };
 };

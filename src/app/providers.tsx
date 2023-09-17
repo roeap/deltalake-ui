@@ -16,7 +16,13 @@ import {
 import { Studio, ThemeProvider, useThemeContext } from "@/components";
 
 const renderer = createDOMRenderer();
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+});
 
 const useStyles = makeStyles({
   root: {

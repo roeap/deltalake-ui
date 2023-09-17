@@ -1,0 +1,1284 @@
+{
+  "components": {
+    "schemas": {
+      "Account": {
+        "properties": {
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "namespace": { "type": "string" },
+          "ttl": { "format": "int64", "type": "integer" }
+        },
+        "required": ["name", "email", "namespace", "ttl"],
+        "type": "object"
+      },
+      "AdminAccountsGetResponse": {
+        "properties": { "account": { "$ref": "#/components/schemas/Account" } },
+        "required": ["account"],
+        "type": "object"
+      },
+      "AdminAccountsListResponse": {
+        "properties": {
+          "items": {
+            "items": { "$ref": "#/components/schemas/Account" },
+            "type": "array"
+          },
+          "nextPageToken": { "nullable": true, "type": "string" }
+        },
+        "required": ["items"],
+        "type": "object"
+      },
+      "AdminAccountsPostRequest": {
+        "properties": {
+          "email": { "type": "string" },
+          "id": { "nullable": true, "type": "string" },
+          "name": { "type": "string" },
+          "namespace": { "type": "string" },
+          "password": { "type": "string" },
+          "ttl": { "format": "int64", "type": "integer" }
+        },
+        "required": ["name", "email", "password", "namespace", "ttl"],
+        "type": "object"
+      },
+      "AdminAccountsPostResponse": {
+        "properties": { "account": { "$ref": "#/components/schemas/Account" } },
+        "required": ["account"],
+        "type": "object"
+      },
+      "AdminLoginRequest": {
+        "properties": {
+          "account": { "type": "string" },
+          "password": { "type": "string" }
+        },
+        "required": ["account", "password"],
+        "type": "object"
+      },
+      "AdminLoginResponse": {
+        "properties": { "profile": { "$ref": "#/components/schemas/Profile" } },
+        "required": ["profile"],
+        "type": "object"
+      },
+      "AdminProfileResponse": {
+        "properties": { "profile": { "$ref": "#/components/schemas/Profile" } },
+        "required": ["profile"],
+        "type": "object"
+      },
+      "AdminSharesPostRequest": {
+        "properties": { "name": { "type": "string" } },
+        "required": ["name"],
+        "type": "object"
+      },
+      "AdminSharesPostResponse": {
+        "properties": { "share": { "$ref": "#/components/schemas/Share" } },
+        "required": ["share"],
+        "type": "object"
+      },
+      "AdminSharesSchemasPostRequest": {
+        "properties": { "name": { "type": "string" } },
+        "required": ["name"],
+        "type": "object"
+      },
+      "AdminSharesSchemasPostResponse": {
+        "properties": { "schema": { "$ref": "#/components/schemas/Schema" } },
+        "required": ["schema"],
+        "type": "object"
+      },
+      "AdminSharesSchemasTablesPostRequest": {
+        "properties": {
+          "location": { "type": "string" },
+          "name": { "type": "string" }
+        },
+        "required": ["name", "location"],
+        "type": "object"
+      },
+      "AdminSharesSchemasTablesPostResponse": {
+        "properties": { "table": { "$ref": "#/components/schemas/Table" } },
+        "required": ["table"],
+        "type": "object"
+      },
+      "ErrorMessage": {
+        "properties": {
+          "errorCode": { "type": "string" },
+          "message": { "type": "string" }
+        },
+        "required": ["errorCode", "message"],
+        "type": "object"
+      },
+      "OpType": {
+        "enum": [
+          "column",
+          "literal",
+          "isNull",
+          "equal",
+          "lessThan",
+          "lessThanOrEqual",
+          "greaterThan",
+          "greaterThanOrEqual",
+          "and",
+          "or",
+          "not"
+        ],
+        "type": "string"
+      },
+      "PredicateJson": {
+        "properties": {
+          "children": {
+            "items": { "$ref": "#/components/schemas/PredicateJson" },
+            "nullable": true,
+            "type": "array"
+          },
+          "name": { "nullable": true, "type": "string" },
+          "op": { "$ref": "#/components/schemas/OpType" },
+          "value": { "nullable": true, "type": "string" },
+          "valueType": {
+            "allOf": [{ "$ref": "#/components/schemas/ValueType" }],
+            "nullable": true
+          }
+        },
+        "required": ["op"],
+        "type": "object"
+      },
+      "Profile": {
+        "properties": {
+          "bearerToken": { "type": "string" },
+          "endpoint": { "type": "string" },
+          "expirationTime": { "type": "string" },
+          "shareCredentialsVersion": { "format": "int32", "type": "integer" }
+        },
+        "required": [
+          "shareCredentialsVersion",
+          "endpoint",
+          "bearerToken",
+          "expirationTime"
+        ],
+        "type": "object"
+      },
+      "Schema": {
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        },
+        "required": ["id", "name"],
+        "type": "object"
+      },
+      "SchemaDetail": {
+        "properties": {
+          "name": { "type": "string" },
+          "share": { "type": "string" }
+        },
+        "required": ["name", "share"],
+        "type": "object"
+      },
+      "Share": {
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        },
+        "required": ["id", "name"],
+        "type": "object"
+      },
+      "SharesAllTablesListResponse": {
+        "properties": {
+          "items": {
+            "items": { "$ref": "#/components/schemas/TableDetail" },
+            "type": "array"
+          },
+          "nextPageToken": { "nullable": true, "type": "string" }
+        },
+        "required": ["items"],
+        "type": "object"
+      },
+      "SharesGetResponse": {
+        "properties": { "share": { "$ref": "#/components/schemas/Share" } },
+        "required": ["share"],
+        "type": "object"
+      },
+      "SharesListResponse": {
+        "properties": {
+          "items": {
+            "items": { "$ref": "#/components/schemas/Share" },
+            "type": "array"
+          },
+          "nextPageToken": { "nullable": true, "type": "string" }
+        },
+        "required": ["items"],
+        "type": "object"
+      },
+      "SharesSchemasListResponse": {
+        "properties": {
+          "items": {
+            "items": { "$ref": "#/components/schemas/SchemaDetail" },
+            "type": "array"
+          },
+          "nextPageToken": { "nullable": true, "type": "string" }
+        },
+        "required": ["items"],
+        "type": "object"
+      },
+      "SharesSchemasTablesListResponse": {
+        "properties": {
+          "items": {
+            "items": { "$ref": "#/components/schemas/TableDetail" },
+            "type": "array"
+          },
+          "nextPageToken": { "nullable": true, "type": "string" }
+        },
+        "required": ["items"],
+        "type": "object"
+      },
+      "SharesSchemasTablesQueryPostRequest": {
+        "properties": {
+          "jsonPredicateHints": {
+            "allOf": [{ "$ref": "#/components/schemas/PredicateJson" }],
+            "nullable": true
+          },
+          "limitHint": {
+            "format": "int32",
+            "nullable": true,
+            "type": "integer"
+          },
+          "predicateHints": {
+            "items": { "type": "string" },
+            "nullable": true,
+            "type": "array"
+          },
+          "timestamp": { "nullable": true, "type": "string" },
+          "version": { "format": "int64", "nullable": true, "type": "integer" }
+        },
+        "type": "object"
+      },
+      "Table": {
+        "properties": {
+          "id": { "type": "string" },
+          "location": { "type": "string" },
+          "name": { "type": "string" }
+        },
+        "required": ["id", "name", "location"],
+        "type": "object"
+      },
+      "TableDetail": {
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "schema": { "type": "string" },
+          "share": { "type": "string" },
+          "shareId": { "type": "string" }
+        },
+        "required": ["id", "shareId", "name", "schema", "share"],
+        "type": "object"
+      },
+      "ValueType": {
+        "enum": ["boolean", "int", "long", "string", "date"],
+        "type": "string"
+      }
+    }
+  },
+  "info": {
+    "contact": {
+      "email": "shingo.okawa.g.h.c@gmail.com",
+      "name": "Shingo OKAWA"
+    },
+    "description": "",
+    "license": { "name": "" },
+    "title": "delta-sharing",
+    "version": "0.1.3"
+  },
+  "openapi": "3.0.3",
+  "paths": {
+    "/admin/accounts": {
+      "get": {
+        "operationId": "list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "maxResults",
+            "required": false,
+            "schema": { "format": "int64", "nullable": true, "type": "integer" }
+          },
+          {
+            "in": "query",
+            "name": "pageToken",
+            "required": false,
+            "schema": { "nullable": true, "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAccountsListResponse"
+                }
+              }
+            },
+            "description": "The accounts were successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["admin::accounts"]
+      },
+      "post": {
+        "operationId": "post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminAccountsPostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAccountsPostResponse"
+                }
+              }
+            },
+            "description": "The account was successfully registered."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The account was already registered."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["admin::accounts"]
+      }
+    },
+    "/admin/accounts/{account}": {
+      "get": {
+        "operationId": "get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "account",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminAccountsGetResponse"
+                }
+              }
+            },
+            "description": "The account's metadata was successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The requested resource does not exist."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["admin::accounts"]
+      }
+    },
+    "/admin/login": {
+      "post": {
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AdminLoginRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AdminLoginResponse" }
+              }
+            },
+            "description": "The profile was successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/admin/profile": {
+      "get": {
+        "operationId": "profile",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProfileResponse"
+                }
+              }
+            },
+            "description": "The profile were successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["admin"]
+      }
+    },
+    "/admin/shares": {
+      "post": {
+        "operationId": "post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminSharesPostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSharesPostResponse"
+                }
+              }
+            },
+            "description": "The share was successfully registered."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The share was already registered."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["admin::shares"]
+      }
+    },
+    "/shares": {
+      "get": {
+        "operationId": "list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "maxResults",
+            "required": false,
+            "schema": { "format": "int64", "nullable": true, "type": "integer" }
+          },
+          {
+            "in": "query",
+            "name": "pageToken",
+            "required": false,
+            "schema": { "nullable": true, "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SharesListResponse" }
+              }
+            },
+            "description": "The shares were successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["shares"]
+      }
+    },
+    "/shares/{share}": {
+      "get": {
+        "operationId": "get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "share",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SharesGetResponse" }
+              }
+            },
+            "description": "The share's metadata was successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The requested resource does not exist."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["shares"]
+      }
+    },
+    "/shares/{share}/all-tables": {
+      "get": {
+        "operationId": "list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "maxResults",
+            "required": false,
+            "schema": { "format": "int64", "nullable": true, "type": "integer" }
+          },
+          {
+            "in": "query",
+            "name": "pageToken",
+            "required": false,
+            "schema": { "nullable": true, "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SharesAllTablesListResponse"
+                }
+              }
+            },
+            "description": "The tables were successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The requested resource does not exist."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["shares::all_tables"]
+      }
+    },
+    "/shares/{share}/schemas": {
+      "get": {
+        "operationId": "list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "maxResults",
+            "required": false,
+            "schema": { "format": "int64", "nullable": true, "type": "integer" }
+          },
+          {
+            "in": "query",
+            "name": "pageToken",
+            "required": false,
+            "schema": { "nullable": true, "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SharesSchemasListResponse"
+                }
+              }
+            },
+            "description": "The schemas were successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The requested resource does not exist."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["shares::schemas"]
+      }
+    },
+    "/shares/{share}/schemas/{schema}/tables": {
+      "get": {
+        "operationId": "list",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "maxResults",
+            "required": false,
+            "schema": { "format": "int64", "nullable": true, "type": "integer" }
+          },
+          {
+            "in": "query",
+            "name": "pageToken",
+            "required": false,
+            "schema": { "nullable": true, "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SharesSchemasTablesListResponse"
+                }
+              }
+            },
+            "description": "The tables were successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The requested resource does not exist."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["shares::schemas::tables"]
+      }
+    },
+    "/shares/{share}/schemas/{schema}/tables/{table}/metadata": {
+      "get": {
+        "operationId": "get",
+        "responses": {
+          "200": {
+            "content": { "text/plain": { "schema": { "type": "string" } } },
+            "description": "The table metadata was successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The requested resource does not exist."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["shares::schemas::tables::metadata"]
+      }
+    },
+    "/shares/{share}/schemas/{schema}/tables/{table}/query": {
+      "post": {
+        "operationId": "post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SharesSchemasTablesQueryPostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": { "text/plain": { "schema": { "type": "string" } } },
+            "description": "The tables were successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The requested resource does not exist."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["shares::schemas::tables::query"]
+      }
+    },
+    "/shares/{share}/schemas/{schema}/tables/{table}/version": {
+      "get": {
+        "operationId": "get",
+        "responses": {
+          "200": {
+            "description": "The table version was successfully returned."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is forbidden from being fulfilled."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The requested resource does not exist."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["shares::schemas::tables::version"]
+      }
+    },
+    "admin/shares/{share}/schemas": {
+      "post": {
+        "operationId": "post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "share",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminSharesSchemasPostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSharesSchemasPostResponse"
+                }
+              }
+            },
+            "description": "The schema was successfully registered."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The schema was already registered."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["admin::shares::schemas"]
+      }
+    },
+    "admin/shares/{share}/schemas/{schema}/tables": {
+      "post": {
+        "operationId": "post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "share",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "in": "path",
+            "name": "schema",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminSharesSchemasTablesPostRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSharesSchemasTablesPostResponse"
+                }
+              }
+            },
+            "description": "The schema was successfully registered."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is malformed."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is unauthenticated. The bearer token is missing or incorrect."
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The schema was already registered."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorMessage" }
+              }
+            },
+            "description": "The request is not handled correctly due to a server error."
+          }
+        },
+        "tags": ["admin::shares::schemas::tables"]
+      }
+    }
+  },
+  "tags": [{ "description": "Delta Sharing API", "name": "Delta Sharing" }]
+}

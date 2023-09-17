@@ -1,34 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { SharingServerContext } from "@/components";
-import { DeltaSharingClient } from "@/clients";
+import { SharingServerContext, useSharingServer } from "@/components";
 
 export default function SharingServerLayout({
+  params,
   children,
 }: {
+  params: { id: string };
   children: React.ReactNode;
 }): JSX.Element {
-  const [client] = useState(
-    new DeltaSharingClient({ baseUrl: "http://localhost:8080" })
-  );
-  const [token, setToken] = useState<string>("");
-
-  useEffect(() => {
-    const login = async () => {
+  const { client } = useSharingServer(params.id);
+  const { data: token } = useSuspenseQuery({
+    queryKey: ["sharing-server-token", params.id],
+    queryFn: async () => {
       const profile = await client.login({
         account: "delta",
         password: "password",
       });
-      setToken(profile.profile.bearerToken);
-    };
-    login();
-  }, [client]);
+      return profile.profile.bearerToken;
+    },
+  });
 
   return (
     <SharingServerContext.Provider value={{ client, credential: () => token }}>
-      {token && children}
+      {children}
     </SharingServerContext.Provider>
   );
 }

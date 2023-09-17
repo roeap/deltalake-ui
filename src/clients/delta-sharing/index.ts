@@ -45,7 +45,10 @@ export class DeltaSharingClient {
     throw new Error(error.message);
   }
 
-  async listShares(params: ListSharesRequestParams, options?: RequestOptions) {
+  async listShares(
+    params: ListSharesRequestParams,
+    options?: RequestOptions
+  ): Promise<components["schemas"]["SharesListResponse"]> {
     const { token, ...other } = options || {};
     const { data, error } = await this.client.GET("/shares", {
       params,
