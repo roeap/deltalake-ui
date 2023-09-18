@@ -9,3 +9,6 @@ compose:
 
 dev:
   npm run dev --workspace=deltalake-ui
+
+build-flight:
+  npm run build --workspace=flight-client

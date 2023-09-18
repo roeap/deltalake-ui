@@ -13,6 +13,7 @@ crate-type = ["cdylib"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+arrow-flight = { version = "46", extras = ["flight-sql"] }
 
 [dependencies.neon]
 version = "0.10"
