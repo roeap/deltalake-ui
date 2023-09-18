@@ -257,13 +257,11 @@
       },
       "TableDetail": {
         "properties": {
-          "id": { "type": "string" },
           "name": { "type": "string" },
           "schema": { "type": "string" },
-          "share": { "type": "string" },
-          "shareId": { "type": "string" }
+          "share": { "type": "string" }
         },
-        "required": ["id", "shareId", "name", "schema", "share"],
+        "required": ["name", "schema", "share"],
         "type": "object"
       },
       "ValueType": {

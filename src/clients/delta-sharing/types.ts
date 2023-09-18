@@ -188,11 +188,9 @@ export interface components {
       name: string;
     };
     TableDetail: {
-      id: string;
       name: string;
       schema: string;
       share: string;
-      shareId: string;
     };
     /** @enum {string} */
     ValueType: "boolean" | "int" | "long" | "string" | "date";

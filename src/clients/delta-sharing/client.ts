@@ -20,11 +20,6 @@ type RequestOptions = {
   token: string;
 };
 
-type CreateAccountRequestParams = paths["/admin/accounts"]["post"];
-
-export type Share = components["schemas"]["Share"];
-export type Schema = components["schemas"]["SchemaDetail"];
-
 export class DeltaSharingClient {
   private readonly client;
 
@@ -88,6 +83,40 @@ export class DeltaSharingClient {
       {
         body: params,
         params: { path: { share } },
+        headers: token ? { authorization: `Bearer ${token}` } : {},
+        ...(other || {}),
+      }
+    );
+    if (data) return data;
+    throw new Error(error.message);
+  }
+
+  async listTables(share: string, schema: string, options?: RequestOptions) {
+    const { token, ...other } = options || {};
+    const { data, error } = await this.client.GET(
+      "/shares/{share}/schemas/{schema}/tables",
+      {
+        params: { path: { share, schema } },
+        headers: token ? { authorization: `Bearer ${token}` } : {},
+        ...(other || {}),
+      }
+    );
+    if (data) return data;
+    throw new Error(error.message);
+  }
+
+  async createTable(
+    share: string,
+    schema: string,
+    params: components["schemas"]["AdminSharesSchemasTablesPostRequest"],
+    options?: RequestOptions
+  ) {
+    const { token, ...other } = options || {};
+    const { data, error } = await this.client.POST(
+      "/admin/shares/{share}/schemas/{schema}/tables",
+      {
+        body: params,
+        params: { path: { share, schema } },
         headers: token ? { authorization: `Bearer ${token}` } : {},
         ...(other || {}),
       }
