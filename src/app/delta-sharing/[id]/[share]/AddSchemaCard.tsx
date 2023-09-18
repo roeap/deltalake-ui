@@ -83,7 +83,7 @@ const AddSchemaDialog: FC<AddShareDialogProps> = ({
     <Dialog {...otherProps}>
       <DialogSurface>
         <DialogBody>
-          <DialogTitle>Add Share</DialogTitle>
+          <DialogTitle>Add Schema</DialogTitle>
           <DialogContent className={classes.dialogBody}>
             <Field label="Name" orientation="horizontal">
               <Input

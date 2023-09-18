@@ -60,16 +60,24 @@ const AddTableDialog: FC<AddTableDialogProps> = ({
   const classes = useStyles();
   const { client, credential } = useSharingServerContext();
   const [tableName, setTableName] = useState("");
+  const [tableLocation, setTableLocation] = useState("");
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (name: string) => {
-      const data = await client.createSchema(
+    mutationFn: async ({
+      name,
+      location,
+    }: {
+      name: string;
+      location: string;
+    }) => {
+      const data = await client.createTable(
         shareName,
-        { name },
+        schemaName,
+        { name, location },
         { token: credential() }
       );
-      return data.schema;
+      return data.table;
       // TODO add toaster to show success
     },
     onSuccess: () => {
@@ -78,6 +86,7 @@ const AddTableDialog: FC<AddTableDialogProps> = ({
       });
       setOpen(false);
       setTableName("");
+      setTableLocation("");
     },
   });
 
@@ -85,12 +94,18 @@ const AddTableDialog: FC<AddTableDialogProps> = ({
     <Dialog {...otherProps}>
       <DialogSurface>
         <DialogBody>
-          <DialogTitle>Add Share</DialogTitle>
+          <DialogTitle>Add Table</DialogTitle>
           <DialogContent className={classes.dialogBody}>
             <Field label="Name" orientation="horizontal">
               <Input
                 value={tableName}
                 onChange={(_, data) => setTableName(data.value)}
+              />
+            </Field>
+            <Field label="Location" orientation="horizontal">
+              <Input
+                value={tableLocation}
+                onChange={(_, data) => setTableLocation(data.value)}
               />
             </Field>
           </DialogContent>
@@ -100,7 +115,9 @@ const AddTableDialog: FC<AddTableDialogProps> = ({
             </DialogTrigger>
             <Button
               appearance="primary"
-              onClick={() => mutation.mutate(tableName)}
+              onClick={() =>
+                mutation.mutate({ name: tableName, location: tableLocation })
+              }
             >
               Create
             </Button>
