@@ -46,27 +46,36 @@ const useStyles = makeStyles({
 type AddShareDialogProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
   serverId: string;
+  shareName: string;
 } & Omit<DialogProps, "children">;
 
-const AddShareDialog: FC<AddShareDialogProps> = ({
+const AddSchemaDialog: FC<AddShareDialogProps> = ({
   setOpen,
   serverId,
+  shareName,
   ...otherProps
 }) => {
   const classes = useStyles();
   const { client, credential } = useSharingServerContext();
-  const [shareName, setShareName] = useState("");
+  const [schemaName, setSchemaName] = useState("");
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async (name: string) => {
-      const data = await client.createShare({ name }, { token: credential() });
+      const data = await client.createSchema(
+        shareName,
+        { name },
+        { token: credential() }
+      );
+      return data.schema;
       // TODO add toaster to show success
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["shares", serverId] });
+      queryClient.invalidateQueries({
+        queryKey: ["schemas", serverId, shareName],
+      });
       setOpen(false);
-      setShareName("");
+      setSchemaName("");
     },
   });
 
@@ -78,8 +87,8 @@ const AddShareDialog: FC<AddShareDialogProps> = ({
           <DialogContent className={classes.dialogBody}>
             <Field label="Name" orientation="horizontal">
               <Input
-                value={shareName}
-                onChange={(_, data) => setShareName(data.value)}
+                value={schemaName}
+                onChange={(_, data) => setSchemaName(data.value)}
               />
             </Field>
           </DialogContent>
@@ -89,7 +98,7 @@ const AddShareDialog: FC<AddShareDialogProps> = ({
             </DialogTrigger>
             <Button
               appearance="primary"
-              onClick={() => mutation.mutate(shareName)}
+              onClick={() => mutation.mutate(schemaName)}
             >
               Create
             </Button>
@@ -100,11 +109,15 @@ const AddShareDialog: FC<AddShareDialogProps> = ({
   );
 };
 
-type AddShareCardProps = {
+type AddSchemaCardProps = {
   serverId: string;
+  shareName: string;
 };
 
-export const AddShareCard: FC<AddShareCardProps> = ({ serverId }) => {
+export const AddSchemaCard: FC<AddSchemaCardProps> = ({
+  serverId,
+  shareName,
+}) => {
   const styles = useStyles();
   const [open, setOpen] = useState(false);
   const restoreFocusTargetAttribute = useRestoreFocusTarget();
@@ -123,13 +136,14 @@ export const AddShareCard: FC<AddShareCardProps> = ({ serverId }) => {
           <AddRegular className={styles.icon} />
         </CardPreview>
       </Card>
-      <AddShareDialog
+      <AddSchemaDialog
         open={open}
         setOpen={setOpen}
         onOpenChange={(_event, data) => {
           setOpen(data.open);
         }}
         serverId={serverId}
+        shareName={shareName}
       />
     </>
   );

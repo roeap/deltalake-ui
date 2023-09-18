@@ -3,7 +3,7 @@
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { useSharingServerContext } from "../../../components/sharing/context";
+import { useSharingServerContext } from "@/clients";
 import { ShareCard } from "./ShareCard";
 import { AddShareCard } from "./AddShareCard";
 
@@ -24,8 +24,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const { data } = useSuspenseQuery({
     queryKey: ["shares", params.id],
-    queryFn: async () => {
-      const data = await client.listShares({}, { token: credential() });
+    queryFn: async ({ signal }) => {
+      const data = await client.listShares({}, { token: credential(), signal });
       // TODO pagination
       return data.items;
     },

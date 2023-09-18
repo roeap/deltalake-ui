@@ -16,7 +16,7 @@ import {
 
 import { AddServerCard } from "./AddServerCard";
 import { DeltaServerCard } from "./DeltaServerCard";
-import { SharingContext } from "@/components";
+import { SharingContext } from "@/clients";
 
 const useStyles = makeStyles({
   root: {

@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { DeltaSharingClient } from "@/clients";
 import { usePathname } from "next/navigation";
+import { DeltaSharingClient } from "./client";
 
 interface SharingServerInfo {
   name: string;
@@ -32,9 +32,15 @@ export const SharingServerContext = createContext<SharingServerContextProps>({
 
 export const useSharingServerContext = () => useContext(SharingServerContext);
 
-export const useSharingServer = (id: string) => {
+export const useSharingServer = () => {
   const { servers } = useSharingContext();
+  const pathname = usePathname();
+  const segments = pathname.split("/");
+  if (segments.length < 3) {
+    throw new Error("useSharingServer used outside sharing serv er routes.");
+  }
+  const id = segments[2];
   const info = servers[id];
   const client = new DeltaSharingClient({ baseUrl: info.url });
-  return { info, client };
+  return { id, info, client };
 };

@@ -12,7 +12,7 @@ import {
   Text,
 } from "@fluentui/react-components";
 
-import { Share } from "@/clients";
+import { Schema } from "@/clients";
 import { DeltaSharingIcon } from "@/icons";
 
 const useStyles = makeStyles({
@@ -31,14 +31,14 @@ const useStyles = makeStyles({
 });
 
 type SharingServerProps = {
-  share: Share;
+  schema: Schema;
 };
 
-export const ShareCard: FC<SharingServerProps> = ({ share }) => {
+export const SchemaCard: FC<SharingServerProps> = ({ schema }) => {
   const classes = useStyles();
   const pathname = usePathname();
 
-  const href = `${pathname}/${share.name}`;
+  const href = `${pathname}/${schema.name}`;
 
   return (
     <Link href={href}>
@@ -50,7 +50,7 @@ export const ShareCard: FC<SharingServerProps> = ({ share }) => {
         <CardPreview className={classes.horizontalCardImage}>
           <DeltaSharingIcon />
         </CardPreview>
-        <CardHeader header={<Text weight="semibold">{share.name}</Text>} />
+        <CardHeader header={<Text weight="semibold">{schema.name}</Text>} />
       </Card>
     </Link>
   );

@@ -1,19 +1,17 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
-
-import { SharingServerContext, useSharingServer } from "@/components";
+import { SharingServerContext, useSharingServer } from "@/clients";
 
 export default function SharingServerLayout({
-  params,
   children,
 }: {
-  params: { id: string };
   children: React.ReactNode;
 }): JSX.Element {
-  const { client } = useSharingServer(params.id);
+  const { id, client } = useSharingServer();
+
   const { data: token } = useSuspenseQuery({
-    queryKey: ["sharing-server-token", params.id],
+    queryKey: ["sharing-server-token", id],
     queryFn: async () => {
       const profile = await client.login({
         account: "delta",
