@@ -8,4 +8,4 @@ compose:
   docker compose -f compose.yaml -p deltalake up -d
 
 dev:
-  npm run dev
+  npm run dev --workspace=deltalake-ui
