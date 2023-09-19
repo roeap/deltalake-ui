@@ -5,13 +5,26 @@ import type {
   IntroduceRequest,
   ConverseRequest,
 } from "./gen/connectrpc/eliza/v1/eliza_pb.js";
-import { sum } from "@lakehouse-rs/flight-sql-client";
+import { LakehouseClient } from "@/clients";
+import { ClientArgs } from "@lakehouse-rs/flight-sql-client";
+
+const options: ClientArgs = {
+  username: "flight_username",
+  password: "testing123",
+  tls: false,
+  host: "127.0.0.1",
+  port: 50051,
+  headers: [],
+};
+let client = undefined;
 
 const connectRouter = (router: ConnectRouter) =>
   router.service(ElizaService, {
-    say(req: SayRequest) {
+    async say(req: SayRequest) {
+      client = await LakehouseClient.fromOptions(options);
+      const table = await client.query("SELECT * FROM delta.test.simple_table");
       return {
-        sentence: `You said ${sum(60, 9)}`,
+        sentence: `You said ${table.toArray()}`,
       };
     },
 
