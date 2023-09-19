@@ -1,9 +1,6 @@
 import { ConnectRouter } from "@connectrpc/connect";
 import { QueryService } from "./gen/lakehouse/data/v1alpha1/api_connect";
-import {
-  type QueryRequest,
-  QueryResponse,
-} from "./gen/lakehouse/data/v1alpha1/api_pb";
+import { type QueryRequest } from "./gen/lakehouse/data/v1alpha1/api_pb";
 import {
   ClientArgs,
   createFlightSqlClient,
