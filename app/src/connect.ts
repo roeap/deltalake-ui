@@ -16,12 +16,22 @@ const options: ClientArgs = {
   port: 50051,
   headers: [],
 };
-let client = undefined;
+
+let client: LakehouseClient | undefined = undefined;
+
+async function getFlightSqlClient(
+  options: ClientArgs
+): Promise<LakehouseClient> {
+  if (!client) {
+    client = await LakehouseClient.fromOptions(options);
+  }
+  return client;
+}
 
 const connectRouter = (router: ConnectRouter) =>
   router.service(ElizaService, {
     async say(req: SayRequest) {
-      client = await LakehouseClient.fromOptions(options);
+      client = await getFlightSqlClient(options);
       const table = await client.query("SELECT * FROM delta.test.simple_table");
       return {
         sentence: `You said ${table.toArray()}`,

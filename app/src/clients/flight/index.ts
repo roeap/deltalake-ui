@@ -1,9 +1,9 @@
-import { tableFromIPC, Table } from "apache-arrow";
 import {
   createFlightSqlClient,
   ClientArgs,
   FlightSqlClient,
 } from "@lakehouse-rs/flight-sql-client";
+import { tableFromIPC, Table } from "apache-arrow";
 
 export class LakehouseClient {
   constructor(private readonly client: FlightSqlClient) {}
