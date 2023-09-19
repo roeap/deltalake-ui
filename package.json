@@ -4,12 +4,19 @@
   "description": "A lakehouse build mostly with rust projects",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "buf generate proto/arrow-flight"
   },
   "author": "Robert Pack <robstar.pack@gmail.com>",
   "license": "MIT",
   "workspaces": [
     "app",
-    "packages/**/*"
-  ]
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@bufbuild/buf": "^1.26.1",
+    "@bufbuild/protoc-gen-es": "^1.3.1",
+    "@connectrpc/protoc-gen-connect-es": "^1.0.0"
+  },
+  "packageManager": "yarn@3.6.3"
 }

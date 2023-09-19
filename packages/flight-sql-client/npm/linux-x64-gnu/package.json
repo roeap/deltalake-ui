@@ -1,0 +1,21 @@
+{
+  "name": "@lakehouse-rs/flight-sql-client-linux-x64-gnu",
+  "version": "0.0.0",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "main": "flight-sql-client.linux-x64-gnu.node",
+  "files": [
+    "flight-sql-client.linux-x64-gnu.node"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10"
+  },
+  "libc": [
+    "glibc"
+  ]
+}

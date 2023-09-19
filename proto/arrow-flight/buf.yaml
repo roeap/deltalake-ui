@@ -1,0 +1,10 @@
+version: v1
+name: buf.build/robstar/arrow-fligt
+lint:
+  use:
+    - DEFAULT
+  except:
+    - PACKAGE_VERSION_SUFFIX
+    - ENUM_ZERO_VALUE_SUFFIX
+    - ENUM_VALUE_PREFIX
+    - ENUM_NO_ALLOW_ALIAS

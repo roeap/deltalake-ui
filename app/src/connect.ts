@@ -5,13 +5,13 @@ import type {
   IntroduceRequest,
   ConverseRequest,
 } from "./gen/connectrpc/eliza/v1/eliza_pb.js";
-import * as flight from "flight-client";
+import { sum } from "@lakehouse-rs/flight-sql-client";
 
 const connectRouter = (router: ConnectRouter) =>
   router.service(ElizaService, {
     say(req: SayRequest) {
       return {
-        sentence: `You said ${flight.hello()}`,
+        sentence: `You said ${sum(60, 9)}`,
       };
     },
 
