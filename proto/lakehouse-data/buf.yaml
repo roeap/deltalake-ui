@@ -1,0 +1,5 @@
+version: v1
+name: buf.build/robstar/lakehouse
+lint:
+  use:
+    - DEFAULT

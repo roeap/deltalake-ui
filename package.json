@@ -4,7 +4,7 @@
   "description": "A lakehouse build mostly with rust projects",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "buf generate proto/arrow-flight"
+    "generate": "buf generate proto/lakehouse-data"
   },
   "author": "Robert Pack <robstar.pack@gmail.com>",
   "license": "MIT",

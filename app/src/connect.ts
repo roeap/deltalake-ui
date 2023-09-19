@@ -1,12 +1,14 @@
 import { ConnectRouter } from "@connectrpc/connect";
-import { ElizaService } from "./gen/connectrpc/eliza/v1/eliza_connect";
-import type {
-  SayRequest,
-  IntroduceRequest,
-  ConverseRequest,
-} from "./gen/connectrpc/eliza/v1/eliza_pb.js";
-import { LakehouseClient } from "@/clients";
-import { ClientArgs } from "@lakehouse-rs/flight-sql-client";
+import { QueryService } from "./gen/lakehouse/data/v1alpha1/api_connect";
+import {
+  type QueryRequest,
+  QueryResponse,
+} from "./gen/lakehouse/data/v1alpha1/api_pb";
+import {
+  ClientArgs,
+  createFlightSqlClient,
+  FlightSqlClient,
+} from "@lakehouse-rs/flight-sql-client";
 
 const options: ClientArgs = {
   username: "flight_username",
@@ -17,45 +19,23 @@ const options: ClientArgs = {
   headers: [],
 };
 
-let client: LakehouseClient | undefined = undefined;
+let client: FlightSqlClient | undefined = undefined;
 
 async function getFlightSqlClient(
   options: ClientArgs
-): Promise<LakehouseClient> {
+): Promise<FlightSqlClient> {
   if (!client) {
-    client = await LakehouseClient.fromOptions(options);
+    client = await createFlightSqlClient(options);
   }
   return client;
 }
 
 const connectRouter = (router: ConnectRouter) =>
-  router.service(ElizaService, {
-    async say(req: SayRequest) {
+  router.service(QueryService, {
+    async query(req: QueryRequest) {
       client = await getFlightSqlClient(options);
-      const table = await client.query("SELECT * FROM delta.test.simple_table");
-      return {
-        sentence: `You said ${table.toArray()}`,
-      };
-    },
-
-    async *introduce(req: IntroduceRequest) {
-      yield { sentence: `Hi ${req.name}, I'm Eliza` };
-      await delay(250);
-      yield {
-        sentence: `Before we begin, ${req.name}, let me tell you something about myself.`,
-      };
-      await delay(250);
-      yield { sentence: `I'm a Rogerian psychotherapist.` };
-      await delay(250);
-      yield { sentence: `How are you feeling today?` };
-    },
-
-    async *converse(reqs: AsyncIterable<ConverseRequest>) {
-      for await (const req of reqs) {
-        yield {
-          sentence: `You said ${req.sentence}`,
-        };
-      }
+      const data = await client.query(req.query);
+      return { data };
     },
   });
 

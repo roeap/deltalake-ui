@@ -1,0 +1,17 @@
+syntax = "proto3";
+package lakehouse.data.v1alpha1;
+
+service QueryService {
+  // Execute a query
+  rpc Query(QueryRequest) returns (QueryResponse) {}
+}
+
+
+message QueryRequest {
+  string query = 1;
+}
+
+message QueryResponse {
+  bytes data = 1;
+}
+
