@@ -1,8 +1,9 @@
 "use client";
 
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
+import { useSuspenseQuery } from "@suspensive/react-query";
 
-import { useSharingContext } from "@/clients";
+import { listSharingServers } from "@/gen";
 import { DeltaServerCard } from "./DeltaServerCard";
 import { AddServerCard } from "./AddServerCard";
 
@@ -19,12 +20,12 @@ const useStyles = makeStyles({
 
 export default function Page() {
   const styles = useStyles();
-  const { servers } = useSharingContext();
+  const { data } = useSuspenseQuery(listSharingServers.useQuery({}));
 
   return (
     <div className={styles.root}>
-      {Object.entries(servers)?.map(([id, server]) => (
-        <DeltaServerCard key={id} id={id} info={server} />
+      {data.servers.map((server) => (
+        <DeltaServerCard key={server.id} server={server} />
       ))}
       <AddServerCard />
     </div>

@@ -15,7 +15,7 @@ import {
 } from "@fluentui/react-components";
 
 import { DeltaSharingIcon } from "@/icons";
-import { SharingServerInfo } from "@/clients";
+import { SharingServerInfo } from "@/gen";
 
 const useStyles = makeStyles({
   cardBody: { height: "fit-content", width: "100%" },
@@ -33,15 +33,14 @@ const useStyles = makeStyles({
 });
 
 type SharingServerProps = {
-  id: string;
-  info: SharingServerInfo;
+  server: SharingServerInfo;
 };
 
-export const DeltaServerCard: FC<SharingServerProps> = ({ id, info }) => {
+export const DeltaServerCard: FC<SharingServerProps> = ({ server }) => {
   const classes = useStyles();
   const pathname = usePathname();
 
-  const href = `${pathname}/${id}`;
+  const href = `${pathname}/${server.id}`;
 
   return (
     <Link href={href}>
@@ -54,9 +53,11 @@ export const DeltaServerCard: FC<SharingServerProps> = ({ id, info }) => {
           <DeltaSharingIcon />
         </CardPreview>
         <CardHeader
-          header={<Text weight="semibold">{info.name}</Text>}
+          header={<Text weight="semibold">{server.name}</Text>}
           description={
-            <Caption1 className={classes.caption}>{info.description}</Caption1>
+            <Caption1 className={classes.caption}>
+              {server.description}
+            </Caption1>
           }
         />
       </Card>

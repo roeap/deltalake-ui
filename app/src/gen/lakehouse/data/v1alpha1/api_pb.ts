@@ -21,9 +21,9 @@ export class SharingServerInfo extends Message<SharingServerInfo> {
   name = "";
 
   /**
-   * @generated from field: string descriprion = 3;
+   * @generated from field: string description = 3;
    */
-  descriprion = "";
+  description = "";
 
   /**
    * @generated from field: string url = 4;
@@ -40,7 +40,7 @@ export class SharingServerInfo extends Message<SharingServerInfo> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "descriprion", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 4, name: "url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
@@ -126,6 +126,80 @@ export class ListSharingServersResponse extends Message<ListSharingServersRespon
 
   static equals(a: ListSharingServersResponse | PlainMessage<ListSharingServersResponse> | undefined, b: ListSharingServersResponse | PlainMessage<ListSharingServersResponse> | undefined): boolean {
     return proto3.util.equals(ListSharingServersResponse, a, b);
+  }
+}
+
+/**
+ * @generated from message lakehouse.data.v1alpha1.GetSharingServerRequest
+ */
+export class GetSharingServerRequest extends Message<GetSharingServerRequest> {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id = "";
+
+  constructor(data?: PartialMessage<GetSharingServerRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "lakehouse.data.v1alpha1.GetSharingServerRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetSharingServerRequest {
+    return new GetSharingServerRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetSharingServerRequest {
+    return new GetSharingServerRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetSharingServerRequest {
+    return new GetSharingServerRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetSharingServerRequest | PlainMessage<GetSharingServerRequest> | undefined, b: GetSharingServerRequest | PlainMessage<GetSharingServerRequest> | undefined): boolean {
+    return proto3.util.equals(GetSharingServerRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message lakehouse.data.v1alpha1.GetSharingServerResponse
+ */
+export class GetSharingServerResponse extends Message<GetSharingServerResponse> {
+  /**
+   * @generated from field: lakehouse.data.v1alpha1.SharingServerInfo server = 1;
+   */
+  server?: SharingServerInfo;
+
+  constructor(data?: PartialMessage<GetSharingServerResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "lakehouse.data.v1alpha1.GetSharingServerResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "server", kind: "message", T: SharingServerInfo },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetSharingServerResponse {
+    return new GetSharingServerResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetSharingServerResponse {
+    return new GetSharingServerResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetSharingServerResponse {
+    return new GetSharingServerResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetSharingServerResponse | PlainMessage<GetSharingServerResponse> | undefined, b: GetSharingServerResponse | PlainMessage<GetSharingServerResponse> | undefined): boolean {
+    return proto3.util.equals(GetSharingServerResponse, a, b);
   }
 }
 

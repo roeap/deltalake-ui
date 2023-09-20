@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useEffect, useState } from "react";
+import { Fragment, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import {
   makeStyles,
@@ -14,11 +14,12 @@ import {
   BreadcrumbButton,
   BreadcrumbDivider,
 } from "@fluentui/react-breadcrumb-preview";
-import { TableSimpleMultipleRegular } from "@fluentui/react-icons";
-import { useSuspenseQuery } from "@suspensive/react-query";
-
-import { SharingContext } from "@/clients";
-import { listSharingServers } from "@/gen";
+import {
+  TableSimpleMultipleRegular,
+  ServerRegular,
+  TableRegular,
+  ShareAndroidRegular,
+} from "@fluentui/react-icons";
 
 const useStyles = makeStyles({
   root: {
@@ -83,6 +84,7 @@ function getLinkItems(pathname: string | null): Item[] {
     navItems.push({
       item: `Server ${segments[1]}`,
       linkProps: {
+        icon: <ServerRegular />,
         href: `/${segments.slice(0, 2).join("/")}`,
       },
     });
@@ -91,6 +93,7 @@ function getLinkItems(pathname: string | null): Item[] {
     navItems.push({
       item: segments[2],
       linkProps: {
+        icon: <ShareAndroidRegular />,
         href: `/${segments.slice(0, 3).join("/")}`,
       },
     });
@@ -103,6 +106,15 @@ function getLinkItems(pathname: string | null): Item[] {
         href: `/${segments.slice(0, 4).join("/")}`,
       },
     });
+    if (segments.length > 4) {
+      navItems.push({
+        item: segments[4],
+        linkProps: {
+          icon: <TableRegular />,
+          href: `/${segments.slice(0, 4).join("/")}`,
+        },
+      });
+    }
   }
 
   return navItems;
@@ -114,32 +126,23 @@ export default function SharingLayout({
   children: React.ReactNode;
 }): JSX.Element {
   const styles = useStyles();
-  const [servers, setServers] = useState({});
   const pathname = usePathname();
-  const { data } = useSuspenseQuery(listSharingServers.useQuery({}));
   const navItems = useMemo(() => getLinkItems(pathname), [pathname]);
 
-  useEffect(() => {
-    const serverMap = Object.fromEntries(data.servers.map((el) => [el.id, el]));
-    setServers(serverMap);
-  }, [data.servers]);
-
   return (
-    <SharingContext.Provider value={{ servers }}>
-      <div className={styles.root}>
-        <div className={styles.header}>
-          <Breadcrumb
-            aria-label="Delta Sharing navigation"
-            size="large"
-            appearance="transparent"
-          >
-            {navItems.map((el, idx) =>
-              renderLink(idx, el, idx === navItems.length - 1)
-            )}
-          </Breadcrumb>
-        </div>
-        <div className={styles.content}>{children}</div>
+    <div className={styles.root}>
+      <div className={styles.header}>
+        <Breadcrumb
+          aria-label="Delta Sharing navigation"
+          size="large"
+          appearance="transparent"
+        >
+          {navItems.map((el, idx) =>
+            renderLink(idx, el, idx === navItems.length - 1)
+          )}
+        </Breadcrumb>
       </div>
-    </SharingContext.Provider>
+      <div className={styles.content}>{children}</div>
+    </div>
   );
 }

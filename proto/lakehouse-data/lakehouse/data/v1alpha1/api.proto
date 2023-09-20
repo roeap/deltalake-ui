@@ -6,12 +6,13 @@ service QueryService {
   rpc Query(QueryRequest) returns (QueryResponse) {}
   // List all registered sharing servers
   rpc ListSharingServers(ListSharingServersRequest) returns (ListSharingServersResponse) {}
+  rpc GetSharingServer(GetSharingServerRequest) returns (GetSharingServerResponse) {}
 }
 
 message SharingServerInfo {
   string id = 1;
   string name = 2;
-  string descriprion = 3;
+  string description = 3;
   string url = 4;
 }
 
@@ -19,6 +20,14 @@ message ListSharingServersRequest {}
 
 message ListSharingServersResponse {
   repeated SharingServerInfo servers = 1;
+}
+
+message GetSharingServerRequest {
+  string id = 1;
+}
+
+message GetSharingServerResponse {
+  SharingServerInfo server = 1;
 }
 
 message QueryRequest {

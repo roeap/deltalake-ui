@@ -1,8 +1,9 @@
-import { ConnectRouter } from "@connectrpc/connect";
+import { ConnectRouter, ConnectError, Code } from "@connectrpc/connect";
 import {
   type QueryRequest,
   QueryService,
   type ListSharingServersRequest,
+  type GetSharingServerRequest,
 } from "@/gen";
 import {
   ClientArgs,
@@ -34,6 +35,7 @@ export const connectRouter = (router: ConnectRouter) =>
   router.service(QueryService, {
     query,
     listSharingServers,
+    getSharingServer,
   });
 
 async function query(req: QueryRequest) {
@@ -59,4 +61,12 @@ const servers = [
 
 async function listSharingServers(req: ListSharingServersRequest) {
   return { servers };
+}
+
+async function getSharingServer(req: GetSharingServerRequest) {
+  const server = servers.find((s) => s.id === req.id);
+  if (server === undefined) {
+    throw new ConnectError(`Server '${req.id}' not registered.`, Code.NotFound);
+  }
+  return { server };
 }

@@ -2,6 +2,9 @@
 
 import { createContext, useContext } from "react";
 import { usePathname } from "next/navigation";
+import { useSuspenseQuery } from "@suspensive/react-query";
+
+import { getSharingServer } from "@/gen";
 import { DeltaSharingClient } from "./client";
 
 export interface SharingServerInfo {
@@ -9,16 +12,6 @@ export interface SharingServerInfo {
   description: string;
   url: string;
 }
-
-interface SharingContextProps {
-  servers: Record<string, SharingServerInfo>;
-}
-
-export const SharingContext = createContext<SharingContextProps>({
-  servers: {},
-});
-
-export const useSharingContext = () => useContext(SharingContext);
 
 interface SharingServerContextProps {
   client: DeltaSharingClient;
@@ -33,14 +26,15 @@ export const SharingServerContext = createContext<SharingServerContextProps>({
 export const useSharingServerContext = () => useContext(SharingServerContext);
 
 export const useSharingServer = () => {
-  const { servers } = useSharingContext();
   const pathname = usePathname();
   const segments = (pathname || "").split("/");
-  if (segments.length < 3) {
-    throw new Error("useSharingServer used outside sharing serv er routes.");
+  const id = segments.length >= 3 ? segments[2] : "";
+  const { data } = useSuspenseQuery(getSharingServer.useQuery({ id }));
+
+  if (!data.server) {
+    throw new Error("Failed to fetch sharing server details");
   }
-  const id = segments[2];
-  const info = servers[id];
-  const client = new DeltaSharingClient({ baseUrl: info.url });
-  return { id, info, client };
+
+  const client = new DeltaSharingClient({ baseUrl: data.server.url });
+  return { id, info: data.server, client };
 };

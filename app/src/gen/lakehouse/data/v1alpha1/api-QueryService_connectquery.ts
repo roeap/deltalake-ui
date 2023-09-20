@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ListSharingServersRequest, ListSharingServersResponse, QueryRequest, QueryResponse } from "./api_pb";
+import { GetSharingServerRequest, GetSharingServerResponse, ListSharingServersRequest, ListSharingServersResponse, QueryRequest, QueryResponse } from "./api_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 import { createQueryService } from "@connectrpc/connect-query";
 
@@ -37,6 +37,15 @@ export const QueryService = {
       O: ListSharingServersResponse,
       kind: MethodKind.Unary,
     },
+    /**
+     * @generated from rpc lakehouse.data.v1alpha1.QueryService.GetSharingServer
+     */
+    getSharingServer: {
+      name: "GetSharingServer",
+      I: GetSharingServerRequest,
+      O: GetSharingServerResponse,
+      kind: MethodKind.Unary,
+    },
   }
 } as const;
 
@@ -57,3 +66,10 @@ export const query = createQueryService({
 export const listSharingServers = createQueryService({
   service: QueryService,
 }).listSharingServers;
+
+/**
+ * @generated from rpc lakehouse.data.v1alpha1.QueryService.GetSharingServer
+ */
+export const getSharingServer = createQueryService({
+  service: QueryService,
+}).getSharingServer;
