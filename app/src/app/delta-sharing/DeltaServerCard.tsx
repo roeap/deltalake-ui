@@ -2,6 +2,7 @@
 
 import { type FC, useCallback } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   makeStyles,
   CardHeader,
@@ -14,6 +15,7 @@ import {
 } from "@fluentui/react-components";
 
 import { DeltaSharingIcon } from "@/icons";
+import { SharingServerInfo } from "@/clients";
 
 const useStyles = makeStyles({
   cardBody: { height: "fit-content", width: "100%" },
@@ -32,42 +34,29 @@ const useStyles = makeStyles({
 
 type SharingServerProps = {
   id: string;
-  name: string;
-  description: string;
-  url: string;
-  selected?: string;
-  onClick: (name: string) => void;
+  info: SharingServerInfo;
 };
 
-export const DeltaServerCard: FC<SharingServerProps> = ({
-  id,
-  name,
-  description,
-  selected,
-  onClick,
-}) => {
+export const DeltaServerCard: FC<SharingServerProps> = ({ id, info }) => {
   const classes = useStyles();
-  const onSelectionChange: CardProps["onSelectionChange"] = useCallback(
-    () => onClick(id),
-    [id, onClick]
-  );
+  const pathname = usePathname();
+
+  const href = `${pathname}/${id}`;
 
   return (
-    <Link href={`/delta-sharing/${id}`}>
+    <Link href={href}>
       <Card
         className={classes.cardBody}
         appearance="filled"
-        selected={selected === id}
         orientation="horizontal"
-        onSelectionChange={onSelectionChange}
       >
         <CardPreview className={classes.horizontalCardImage}>
           <DeltaSharingIcon />
         </CardPreview>
         <CardHeader
-          header={<Text weight="semibold">{name}</Text>}
+          header={<Text weight="semibold">{info.name}</Text>}
           description={
-            <Caption1 className={classes.caption}>{description}</Caption1>
+            <Caption1 className={classes.caption}>{info.description}</Caption1>
           }
         />
       </Card>

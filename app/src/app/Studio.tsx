@@ -1,21 +1,20 @@
 "use client";
 
-import { Suspense, useState, FC } from "react";
+import { Suspense, FC } from "react";
 import { SettingsRegular } from "@fluentui/react-icons";
 import {
   TabList,
   Tab,
-  TabListProps,
   makeStyles,
   tokens,
   shorthands,
 } from "@fluentui/react-components";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ErrorBoundary } from "react-error-boundary";
 import Link from "next/link";
 
 import { Loading, ErrorFallback, Header } from "@/components";
-import { DeltalakeIcon, GraphQLIcon, DeltaSharingIcon } from "@/icons";
+import { DeltalakeIcon, DeltaSharingIcon } from "@/icons";
 
 const useStyles = makeStyles({
   root: {
@@ -54,7 +53,7 @@ export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
   const classes = useStyles();
   const pathname = usePathname();
 
-  const segments = pathname.split("/");
+  const segments = (pathname || "").split("/");
   const rootPath = segments.length < 2 ? "/" : `/${segments[1]}`;
 
   return (
@@ -82,10 +81,10 @@ export const Studio: FC<{ children: React.ReactNode }> = ({ children }) => {
                 <DeltaSharingIcon size={45} />
               </Tab>
             </Link>
-            <Link href={"/delta"}>
+            <Link href={"/query"}>
               <Tab
-                id="delta"
-                value="/delta"
+                id="query"
+                value="/query"
                 style={{ height: "64px", width: "64px", paddingBottom: 4 }}
               >
                 <DeltalakeIcon height={38} width={38} />

@@ -35,7 +35,7 @@ export const useSharingServerContext = () => useContext(SharingServerContext);
 export const useSharingServer = () => {
   const { servers } = useSharingContext();
   const pathname = usePathname();
-  const segments = pathname.split("/");
+  const segments = (pathname || "").split("/");
   if (segments.length < 3) {
     throw new Error("useSharingServer used outside sharing serv er routes.");
   }
