@@ -1,6 +1,5 @@
 import { ConnectRouter } from "@connectrpc/connect";
-import { QueryService } from "./gen/lakehouse/data/v1alpha1/api_connect";
-import { type QueryRequest } from "./gen/lakehouse/data/v1alpha1/api_pb";
+import { type QueryRequest, QueryService } from "@/gen";
 import {
   ClientArgs,
   createFlightSqlClient,
@@ -27,7 +26,7 @@ async function getFlightSqlClient(
   return client;
 }
 
-const connectRouter = (router: ConnectRouter) =>
+export const connectRouter = (router: ConnectRouter) =>
   router.service(QueryService, {
     async query(req: QueryRequest) {
       client = await getFlightSqlClient(options);
@@ -35,8 +34,6 @@ const connectRouter = (router: ConnectRouter) =>
       return { data };
     },
   });
-
-export default connectRouter;
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

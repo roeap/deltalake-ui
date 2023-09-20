@@ -1,5 +1,5 @@
 import { nextJsApiRouter } from "@connectrpc/connect-next";
-import routes from "../../connect";
+import { connectRouter } from "@/api";
 
-const { handler, config } = nextJsApiRouter({ routes });
+const { handler, config } = nextJsApiRouter({ routes: connectRouter });
 export { handler as default, config };

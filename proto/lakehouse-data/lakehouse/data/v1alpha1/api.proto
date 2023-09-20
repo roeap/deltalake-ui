@@ -4,8 +4,22 @@ package lakehouse.data.v1alpha1;
 service QueryService {
   // Execute a query
   rpc Query(QueryRequest) returns (QueryResponse) {}
+  // List all registered sharing servers
+  rpc ListSharingServers(ListSharingServersRequest) returns (ListSharingServersResponse) {}
 }
 
+message SharingServerInfo {
+  string id = 1;
+  string name = 2;
+  string descriprion = 3;
+  string url = 4;
+}
+
+message ListSharingServersRequest {}
+
+message ListSharingServersResponse {
+  repeated SharingServerInfo servers = 1;
+}
 
 message QueryRequest {
   string query = 1;

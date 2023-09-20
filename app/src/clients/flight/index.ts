@@ -1,8 +1,7 @@
 import { tableFromIPC, Table } from "apache-arrow";
 import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
-import { QueryService } from "../../gen/lakehouse/data/v1alpha1/api_connect";
-import { QueryRequest } from "@/gen/lakehouse/data/v1alpha1/api_pb";
+import { QueryRequest, QueryService } from "@/gen";
 
 const transport = createConnectTransport({
   baseUrl: "http://localhost:3000/api",

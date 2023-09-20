@@ -3,6 +3,8 @@ plugins:
   - plugin: es
     opt: target=ts
     out: app/src/gen
-  - plugin: connect-es
-    opt: target=ts
+  - plugin: connect-query
+    opt:
+      - target=ts
+      - import_extension=none
     out: app/src/gen

@@ -7,6 +7,129 @@ import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialM
 import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
+ * @generated from message lakehouse.data.v1alpha1.SharingServerInfo
+ */
+export class SharingServerInfo extends Message<SharingServerInfo> {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id = "";
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name = "";
+
+  /**
+   * @generated from field: string descriprion = 3;
+   */
+  descriprion = "";
+
+  /**
+   * @generated from field: string url = 4;
+   */
+  url = "";
+
+  constructor(data?: PartialMessage<SharingServerInfo>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "lakehouse.data.v1alpha1.SharingServerInfo";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "descriprion", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SharingServerInfo {
+    return new SharingServerInfo().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SharingServerInfo {
+    return new SharingServerInfo().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SharingServerInfo {
+    return new SharingServerInfo().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: SharingServerInfo | PlainMessage<SharingServerInfo> | undefined, b: SharingServerInfo | PlainMessage<SharingServerInfo> | undefined): boolean {
+    return proto3.util.equals(SharingServerInfo, a, b);
+  }
+}
+
+/**
+ * @generated from message lakehouse.data.v1alpha1.ListSharingServersRequest
+ */
+export class ListSharingServersRequest extends Message<ListSharingServersRequest> {
+  constructor(data?: PartialMessage<ListSharingServersRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "lakehouse.data.v1alpha1.ListSharingServersRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ListSharingServersRequest {
+    return new ListSharingServersRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ListSharingServersRequest {
+    return new ListSharingServersRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ListSharingServersRequest {
+    return new ListSharingServersRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ListSharingServersRequest | PlainMessage<ListSharingServersRequest> | undefined, b: ListSharingServersRequest | PlainMessage<ListSharingServersRequest> | undefined): boolean {
+    return proto3.util.equals(ListSharingServersRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message lakehouse.data.v1alpha1.ListSharingServersResponse
+ */
+export class ListSharingServersResponse extends Message<ListSharingServersResponse> {
+  /**
+   * @generated from field: repeated lakehouse.data.v1alpha1.SharingServerInfo servers = 1;
+   */
+  servers: SharingServerInfo[] = [];
+
+  constructor(data?: PartialMessage<ListSharingServersResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "lakehouse.data.v1alpha1.ListSharingServersResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "servers", kind: "message", T: SharingServerInfo, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ListSharingServersResponse {
+    return new ListSharingServersResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ListSharingServersResponse {
+    return new ListSharingServersResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ListSharingServersResponse {
+    return new ListSharingServersResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ListSharingServersResponse | PlainMessage<ListSharingServersResponse> | undefined, b: ListSharingServersResponse | PlainMessage<ListSharingServersResponse> | undefined): boolean {
+    return proto3.util.equals(ListSharingServersResponse, a, b);
+  }
+}
+
+/**
  * @generated from message lakehouse.data.v1alpha1.QueryRequest
  */
 export class QueryRequest extends Message<QueryRequest> {
