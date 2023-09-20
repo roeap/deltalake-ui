@@ -1,7 +1,7 @@
 "use client";
 
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@suspensive/react-query";
 
 import { useSharingServerContext } from "@/clients";
 import { ShareCard } from "./ShareCard";
@@ -33,7 +33,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <div className={styles.root}>
-      {data?.map((share) => (
+      {data.map((share) => (
         <ShareCard key={share.name} share={share} />
       ))}
       <AddShareCard serverId={params.id} />

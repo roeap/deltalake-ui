@@ -1,7 +1,7 @@
 "use client";
 
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@suspensive/react-query";
 
 import { useSharingServerContext } from "@/clients";
 import { SchemaCard } from "./SchemaCard";
@@ -40,7 +40,7 @@ export default function Page({
 
   return (
     <div className={styles.root}>
-      {data?.map((schema) => (
+      {data.map((schema) => (
         <SchemaCard
           key={schema.name}
           schema={{ name: schema.name, share: params.share }}

@@ -1,7 +1,7 @@
 "use client";
 
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@suspensive/react-query";
 
 import { useSharingServerContext } from "@/clients";
 import { TableCard } from "./TableCard";
@@ -40,7 +40,7 @@ export default function Page({
 
   return (
     <div className={styles.root}>
-      {data?.map((table) => (
+      {data.map((table) => (
         <TableCard
           key={table.name}
           table={{
