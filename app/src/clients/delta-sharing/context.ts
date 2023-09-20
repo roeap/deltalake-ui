@@ -4,7 +4,7 @@ import { createContext, useContext } from "react";
 import { usePathname } from "next/navigation";
 import { DeltaSharingClient } from "./client";
 
-interface SharingServerInfo {
+export interface SharingServerInfo {
   name: string;
   description: string;
   url: string;
