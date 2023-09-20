@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState, type FC } from "react";
+import { useEffect, useState, type FC, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TransportProvider } from "@connectrpc/connect-query";
+import { createConnectTransport } from "@connectrpc/connect-web";
 import {
   createDOMRenderer,
   RendererProvider,
@@ -35,6 +37,15 @@ const useStyles = makeStyles({
 export const Providers: FC<{ children: React.ReactNode }> = ({ children }) => {
   const [hasMounted, setHasMounted] = useState(false);
 
+  const transport = useMemo(
+    () =>
+      createConnectTransport({
+        baseUrl:
+          typeof window !== "undefined" ? `${window.location.origin}/api` : "",
+      }),
+    []
+  );
+
   useEffect(() => {
     setHasMounted(true);
   }, []);
@@ -44,15 +55,17 @@ export const Providers: FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <RendererProvider renderer={renderer || createDOMRenderer()}>
-          <SSRProvider>
-            <WrappedFluentProvider>{children}</WrappedFluentProvider>
-          </SSRProvider>
-        </RendererProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <TransportProvider transport={transport}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <RendererProvider renderer={renderer || createDOMRenderer()}>
+            <SSRProvider>
+              <WrappedFluentProvider>{children}</WrappedFluentProvider>
+            </SSRProvider>
+          </RendererProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </TransportProvider>
   );
 };
 

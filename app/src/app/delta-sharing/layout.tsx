@@ -1,6 +1,7 @@
 "use client";
 
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   makeStyles,
   shorthands,
@@ -12,10 +13,12 @@ import {
   BreadcrumbItem,
   BreadcrumbButton,
   BreadcrumbDivider,
-  BreadcrumbProps,
 } from "@fluentui/react-breadcrumb-preview";
+import { TableSimpleMultipleRegular } from "@fluentui/react-icons";
+import { useSuspenseQuery } from "@suspensive/react-query";
+
 import { SharingContext } from "@/clients";
-import { usePathname } from "next/navigation";
+import { listSharingServers } from "@/gen";
 
 const useStyles = makeStyles({
   root: {
@@ -40,19 +43,6 @@ const useStyles = makeStyles({
     backgroundColor: tokens.colorNeutralBackground3,
   },
 });
-
-const servers = {
-  "1": {
-    name: "Production data",
-    description: "Awesome data to share",
-    url: "http://localhost:8080",
-  },
-  "2": {
-    name: "Business data",
-    description: "Awesome data to share",
-    url: "http://localhost:8080",
-  },
-};
 
 type Item = {
   item?: string;
@@ -109,6 +99,7 @@ function getLinkItems(pathname: string | null): Item[] {
     navItems.push({
       item: segments[3],
       linkProps: {
+        icon: <TableSimpleMultipleRegular />,
         href: `/${segments.slice(0, 4).join("/")}`,
       },
     });
@@ -123,8 +114,15 @@ export default function SharingLayout({
   children: React.ReactNode;
 }): JSX.Element {
   const styles = useStyles();
+  const [servers, setServers] = useState({});
   const pathname = usePathname();
+  const { data } = useSuspenseQuery(listSharingServers.useQuery({}));
   const navItems = useMemo(() => getLinkItems(pathname), [pathname]);
+
+  useEffect(() => {
+    const serverMap = Object.fromEntries(data.servers.map((el) => [el.id, el]));
+    setServers(serverMap);
+  }, [data.servers]);
 
   return (
     <SharingContext.Provider value={{ servers }}>

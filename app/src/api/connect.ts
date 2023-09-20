@@ -1,5 +1,9 @@
 import { ConnectRouter } from "@connectrpc/connect";
-import { type QueryRequest, QueryService } from "@/gen";
+import {
+  type QueryRequest,
+  QueryService,
+  type ListSharingServersRequest,
+} from "@/gen";
 import {
   ClientArgs,
   createFlightSqlClient,
@@ -28,13 +32,31 @@ async function getFlightSqlClient(
 
 export const connectRouter = (router: ConnectRouter) =>
   router.service(QueryService, {
-    async query(req: QueryRequest) {
-      client = await getFlightSqlClient(options);
-      const data = await client.query(req.query);
-      return { data };
-    },
+    query,
+    listSharingServers,
   });
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+async function query(req: QueryRequest) {
+  client = await getFlightSqlClient(options);
+  const data = await client.query(req.query);
+  return { data };
+}
+
+const servers = [
+  {
+    id: "1",
+    name: "Production data",
+    description: "Awesome data to share",
+    url: "http://localhost:8080",
+  },
+  {
+    id: "2",
+    name: "Business data",
+    description: "Awesome data to share",
+    url: "http://localhost:8080",
+  },
+];
+
+async function listSharingServers(req: ListSharingServersRequest) {
+  return { servers };
 }
