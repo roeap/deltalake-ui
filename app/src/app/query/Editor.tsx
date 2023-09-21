@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import * as fc from "@fluentui/react-components";
 import { EditRegular, CheckmarkRegular } from "@fluentui/react-icons";
-import MonacoEditor from "@monaco-editor/react";
+import MonacoEditor, { useMonaco, OnMount } from "@monaco-editor/react";
+import * as monaco from "monaco-editor";
 import { Chart } from "./Chart";
 
 const useStyles = fc.makeStyles({
@@ -31,6 +32,8 @@ const useStyles = fc.makeStyles({
 
 export default function Editor(): JSX.Element {
   const classes = useStyles();
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+
   const [query, setQuery] = useState(
     'SELECT integer as "intCol", double as "doubleCol" from delta.test.d121_only_struct_stats'
   );
@@ -58,10 +61,20 @@ export default function Editor(): JSX.Element {
     []
   );
 
+  const handleEditorDidMount: OnMount = useCallback((editor, monaco) => {
+    editorRef.current = editor;
+  }, []);
+
   const readOnly = useMemo(
     () => !(checkedValues["edit"] || []).includes("editing"),
     [checkedValues]
   );
+
+  useEffect(() => {
+    if (readOnly && editorRef.current) {
+      setQuery(editorRef.current.getValue());
+    }
+  }, [readOnly]);
 
   return (
     <div className={classes.content}>
@@ -98,6 +111,7 @@ export default function Editor(): JSX.Element {
         defaultValue="SELECT integer as intCol, double as doubleCol from delta.test.d121_only_struct_stats"
         language="sql"
         theme="vs-dark"
+        onMount={handleEditorDidMount}
         options={{
           automaticLayout: true,
           domReadOnly: readOnly,
