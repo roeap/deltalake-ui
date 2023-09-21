@@ -8,6 +8,7 @@ import Editor from "./Editor";
 const useStyles = makeStyles({
   root: {
     display: "flex",
+    width: "100%",
     flexDirection: "row",
     flexGrow: 1,
     backgroundColor: tokens.colorNeutralBackground3,

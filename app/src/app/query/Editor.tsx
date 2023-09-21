@@ -25,6 +25,7 @@ const useStyles = makeStyles({
   content: {
     display: "flex",
     flexGrow: 1,
+    width: 0,
     backgroundColor: tokens.colorNeutralBackground3,
   },
   area: {
@@ -62,6 +63,7 @@ export default function Editor(): JSX.Element {
         className={classes.area}
         defaultValue="SELECT * from my_table"
         language="sql"
+        options={{ automaticLayout: true }}
       />
     </div>
   );
