@@ -52,7 +52,7 @@ export function CatalogTreeItemLayout({
       case "table":
         return { icon: <TableSimpleRegular />, label: item.name };
       case "field":
-        const label = `${item.name} [${item.dataType.toString()}]`;
+        const label = `${item.name}`;
         if (item.dataType === Type.Utf8) {
           return { icon: <TextFieldRegular />, label };
         } else if ([Type.Map, Type.Struct].includes(item.dataType)) {
