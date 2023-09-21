@@ -18,7 +18,7 @@
     "@connectrpc/connect-query": "^0.4.4",
     "@connectrpc/connect-web": "^1.0.0",
     "@fluentui/react-breadcrumb-preview": "^1.0.1",
-    "@fluentui/react-components": "^9.31.1",
+    "@fluentui/react-components": "^9.32.1",
     "@lakehouse-rs/flight-sql-client": "^0.0.7",
     "@monaco-editor/react": "^4.5.2",
     "@suspensive/react": "^1.14.4",
