@@ -15,13 +15,15 @@ const useStyles = makeStyles({
   },
 });
 
-const useCatalogs = (): Table<{
+type tablesSchema = {
   catalog_name: Utf8;
   db_schema_name: Utf8;
   table_name: Utf8;
   table_type: Utf8;
   table_schema: Binary;
-}> => {
+};
+
+const useCatalogs = (): Table<tablesSchema> => {
   const { data } = useSuspenseQuery(
     getTables.useQuery({ includeSchema: true })
   );
