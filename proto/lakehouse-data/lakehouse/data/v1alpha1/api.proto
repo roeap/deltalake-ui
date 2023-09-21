@@ -4,6 +4,7 @@ package lakehouse.data.v1alpha1;
 service QueryService {
   // Execute a query
   rpc Query(QueryRequest) returns (QueryResponse) {}
+  rpc GetTables(GetTablesRequest) returns (GetTablesResponse) {}
   // List all registered sharing servers
   rpc ListSharingServers(ListSharingServersRequest) returns (ListSharingServersResponse) {}
   rpc GetSharingServer(GetSharingServerRequest) returns (GetSharingServerResponse) {}
@@ -38,3 +39,43 @@ message QueryResponse {
   bytes data = 1;
 }
 
+message GetTablesRequest {
+  /*
+   * Specifies the Catalog to search for the tables.
+   * An empty string retrieves those without a catalog.
+   * If omitted the catalog name should not be used to narrow the search.
+   */
+  optional string catalog = 1;
+
+  /*
+   * Specifies a filter pattern for schemas to search for.
+   * When no db_schema_filter_pattern is provided, all schemas matching other filters are searched.
+   * In the pattern string, two special characters can be used to denote matching rules:
+   *    - "%" means to match any substring with 0 or more characters.
+   *    - "_" means to match any one character.
+   */
+  optional string db_schema_filter_pattern = 2;
+
+  /*
+   * Specifies a filter pattern for tables to search for.
+   * When no table_name_filter_pattern is provided, all tables matching other filters are searched.
+   * In the pattern string, two special characters can be used to denote matching rules:
+   *    - "%" means to match any substring with 0 or more characters.
+   *    - "_" means to match any one character.
+   */
+  optional string table_name_filter_pattern = 3;
+
+  /*
+   * Specifies a filter of table types which must match.
+   * The table types depend on vendor/implementation. It is usually used to separate tables from views or system tables.
+   * TABLE, VIEW, and SYSTEM TABLE are commonly supported.
+   */
+  repeated string table_types = 4;
+
+  // Specifies if the Arrow schema should be returned for found tables.
+  bool include_schema = 5;
+}
+
+message GetTablesResponse {
+  bytes data = 1;
+}

@@ -277,3 +277,127 @@ export class QueryResponse extends Message<QueryResponse> {
   }
 }
 
+/**
+ * @generated from message lakehouse.data.v1alpha1.GetTablesRequest
+ */
+export class GetTablesRequest extends Message<GetTablesRequest> {
+  /**
+   *
+   * Specifies the Catalog to search for the tables.
+   * An empty string retrieves those without a catalog.
+   * If omitted the catalog name should not be used to narrow the search.
+   *
+   * @generated from field: optional string catalog = 1;
+   */
+  catalog?: string;
+
+  /**
+   *
+   * Specifies a filter pattern for schemas to search for.
+   * When no db_schema_filter_pattern is provided, all schemas matching other filters are searched.
+   * In the pattern string, two special characters can be used to denote matching rules:
+   *    - "%" means to match any substring with 0 or more characters.
+   *    - "_" means to match any one character.
+   *
+   * @generated from field: optional string db_schema_filter_pattern = 2;
+   */
+  dbSchemaFilterPattern?: string;
+
+  /**
+   *
+   * Specifies a filter pattern for tables to search for.
+   * When no table_name_filter_pattern is provided, all tables matching other filters are searched.
+   * In the pattern string, two special characters can be used to denote matching rules:
+   *    - "%" means to match any substring with 0 or more characters.
+   *    - "_" means to match any one character.
+   *
+   * @generated from field: optional string table_name_filter_pattern = 3;
+   */
+  tableNameFilterPattern?: string;
+
+  /**
+   *
+   * Specifies a filter of table types which must match.
+   * The table types depend on vendor/implementation. It is usually used to separate tables from views or system tables.
+   * TABLE, VIEW, and SYSTEM TABLE are commonly supported.
+   *
+   * @generated from field: repeated string table_types = 4;
+   */
+  tableTypes: string[] = [];
+
+  /**
+   * Specifies if the Arrow schema should be returned for found tables.
+   *
+   * @generated from field: bool include_schema = 5;
+   */
+  includeSchema = false;
+
+  constructor(data?: PartialMessage<GetTablesRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "lakehouse.data.v1alpha1.GetTablesRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "catalog", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 2, name: "db_schema_filter_pattern", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 3, name: "table_name_filter_pattern", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 4, name: "table_types", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 5, name: "include_schema", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTablesRequest {
+    return new GetTablesRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetTablesRequest {
+    return new GetTablesRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetTablesRequest {
+    return new GetTablesRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetTablesRequest | PlainMessage<GetTablesRequest> | undefined, b: GetTablesRequest | PlainMessage<GetTablesRequest> | undefined): boolean {
+    return proto3.util.equals(GetTablesRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message lakehouse.data.v1alpha1.GetTablesResponse
+ */
+export class GetTablesResponse extends Message<GetTablesResponse> {
+  /**
+   * @generated from field: bytes data = 1;
+   */
+  data = new Uint8Array(0);
+
+  constructor(data?: PartialMessage<GetTablesResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "lakehouse.data.v1alpha1.GetTablesResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "data", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetTablesResponse {
+    return new GetTablesResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetTablesResponse {
+    return new GetTablesResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetTablesResponse {
+    return new GetTablesResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetTablesResponse | PlainMessage<GetTablesResponse> | undefined, b: GetTablesResponse | PlainMessage<GetTablesResponse> | undefined): boolean {
+    return proto3.util.equals(GetTablesResponse, a, b);
+  }
+}
+

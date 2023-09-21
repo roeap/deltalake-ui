@@ -4,14 +4,15 @@ import {
   QueryService,
   type ListSharingServersRequest,
   type GetSharingServerRequest,
+  type GetTablesRequest,
 } from "@/gen";
 import {
-  ClientArgs,
+  ClientOptions,
   createFlightSqlClient,
   FlightSqlClient,
 } from "@lakehouse-rs/flight-sql-client";
 
-const options: ClientArgs = {
+const options: ClientOptions = {
   username: "flight_username",
   password: "testing123",
   tls: false,
@@ -23,7 +24,7 @@ const options: ClientArgs = {
 let client: FlightSqlClient | undefined = undefined;
 
 async function getFlightSqlClient(
-  options: ClientArgs
+  options: ClientOptions
 ): Promise<FlightSqlClient> {
   if (!client) {
     client = await createFlightSqlClient(options);
@@ -34,6 +35,7 @@ async function getFlightSqlClient(
 export const connectRouter = (router: ConnectRouter) =>
   router.service(QueryService, {
     query,
+    getTables,
     listSharingServers,
     getSharingServer,
   });
@@ -41,6 +43,12 @@ export const connectRouter = (router: ConnectRouter) =>
 async function query(req: QueryRequest) {
   client = await getFlightSqlClient(options);
   const data = await client.query(req.query);
+  return { data };
+}
+
+async function getTables(req: GetTablesRequest) {
+  client = await getFlightSqlClient(options);
+  const data = await client.getTables(req);
   return { data };
 }
 
