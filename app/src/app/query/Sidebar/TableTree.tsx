@@ -1,30 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  makeStyles,
-  HeadlessFlatTreeItemProps,
-  useHeadlessFlatTree_unstable,
-  useRestoreFocusTarget,
-  FlatTree,
-  Menu,
-  MenuPopover,
-  MenuItem,
-  MenuTrigger,
-  MenuList,
-  FlatTreeItem,
-} from "@fluentui/react-components";
+import * as fc from "@fluentui/react-components";
 import { useSuspenseQuery } from "@suspensive/react-query";
-import {
-  tableFromIPC,
-  Utf8,
-  Binary,
-  Type,
-  Field,
-  Struct,
-  Map_,
-  List,
-} from "apache-arrow";
+import * as arrow from "apache-arrow";
 import { CatalogTreeItemLayout } from "./CatalogTreeItemLayout";
 
 import { getTables } from "@/gen";
@@ -47,16 +26,16 @@ type TableInfo = {
 type FieldInfo = {
   kind: "field";
   name: string;
-  dataType: Type;
+  dataType: arrow.Type;
 };
 
 type ItemInfo = CatalogInfo | SchemaInfo | TableInfo | FieldInfo;
 
-type FlatItem = HeadlessFlatTreeItemProps & {
+type FlatItem = fc.HeadlessFlatTreeItemProps & {
   item: ItemInfo;
 };
 
-const useStyles = makeStyles({
+const useStyles = fc.makeStyles({
   root: {
     height: "100%",
     width: "100%",
@@ -68,26 +47,26 @@ const useStyles = makeStyles({
 });
 
 type tablesSchema = {
-  catalog_name: Utf8;
-  db_schema_name: Utf8;
-  table_name: Utf8;
-  table_type: Utf8;
-  table_schema: Binary;
+  catalog_name: arrow.Utf8;
+  db_schema_name: arrow.Utf8;
+  table_name: arrow.Utf8;
+  table_type: arrow.Utf8;
+  table_schema: arrow.Binary;
 };
 
-function isStructField(item: Field): item is Field<Struct> {
-  return item.typeId === Type.Struct;
+function isStructField(item: arrow.Field): item is arrow.Field<arrow.Struct> {
+  return item.typeId === arrow.Type.Struct;
 }
 
-function isMapField(item: Field): item is Field<Map_> {
-  return item.typeId === Type.Map;
+function isMapField(item: arrow.Field): item is arrow.Field<arrow.Map_> {
+  return item.typeId === arrow.Type.Map;
 }
 
-function isListField(item: Field): item is Field<List> {
-  return item.typeId === Type.List;
+function isListField(item: arrow.Field): item is arrow.Field<arrow.List> {
+  return item.typeId === arrow.Type.List;
 }
 
-function getFieldItems(field: Field, rootValue: string): FlatItem[] {
+function getFieldItems(field: arrow.Field, rootValue: string): FlatItem[] {
   const items: FlatItem[] = [];
   const root = `${rootValue}.${field.name}`;
   items.push({
@@ -119,7 +98,7 @@ const useTreeItems = (): FlatItem[] => {
   );
 
   useEffect(() => {
-    const table = tableFromIPC<tablesSchema>(data.data);
+    const table = arrow.tableFromIPC<tablesSchema>(data.data);
 
     const catalogs: Record<string, FlatItem> = {};
     const schemas: Record<string, FlatItem> = {};
@@ -153,7 +132,7 @@ const useTreeItems = (): FlatItem[] => {
         parentValue: schemaValue,
       });
 
-      const schema = tableFromIPC(row.table_schema).schema;
+      const schema = arrow.tableFromIPC(row.table_schema).schema;
       for (const field of schema.fields) {
         items.push(...getFieldItems(field, tableValue));
       }
@@ -172,35 +151,35 @@ const useTreeItems = (): FlatItem[] => {
 export function TableTree(): JSX.Element {
   const classes = useStyles();
   const treeItems = useTreeItems();
-  const flatTree = useHeadlessFlatTree_unstable(treeItems);
-  const focusTargetAttribute = useRestoreFocusTarget();
+  const flatTree = fc.useHeadlessFlatTree_unstable(treeItems);
+  const focusTargetAttribute = fc.useRestoreFocusTarget();
 
   return (
     <div className={classes.root}>
-      <FlatTree {...flatTree.getTreeProps()} aria-label="Flat Tree">
+      <fc.FlatTree {...flatTree.getTreeProps()} aria-label="Flat Tree">
         {Array.from(flatTree.items(), (flatTreeItem) => {
           const { item, ...treeItemProps } = flatTreeItem.getTreeItemProps();
           return (
-            <Menu
+            <fc.Menu
               key={flatTreeItem.value}
               positioning="below-end"
               openOnContext
             >
-              <MenuTrigger disableButtonEnhancement>
-                <FlatTreeItem {...focusTargetAttribute} {...treeItemProps}>
+              <fc.MenuTrigger disableButtonEnhancement>
+                <fc.FlatTreeItem {...focusTargetAttribute} {...treeItemProps}>
                   <CatalogTreeItemLayout item={item} />
-                </FlatTreeItem>
-              </MenuTrigger>
-              <MenuPopover>
-                <MenuList>
-                  <MenuItem>Edit</MenuItem>
-                  <MenuItem>New</MenuItem>
-                </MenuList>
-              </MenuPopover>
-            </Menu>
+                </fc.FlatTreeItem>
+              </fc.MenuTrigger>
+              <fc.MenuPopover>
+                <fc.MenuList>
+                  <fc.MenuItem>Edit</fc.MenuItem>
+                  <fc.MenuItem>New</fc.MenuItem>
+                </fc.MenuList>
+              </fc.MenuPopover>
+            </fc.Menu>
           );
         })}
-      </FlatTree>
+      </fc.FlatTree>
     </div>
   );
 }

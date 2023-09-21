@@ -1,16 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import {
-  makeStyles,
-  tokens,
-  Toolbar,
-  ToolbarButton,
-  ToolbarToggleButton,
-  TabList,
-  Tab,
-  ToolbarProps,
-} from "@fluentui/react-components";
+import { useMemo, useState, useCallback } from "react";
+import * as fc from "@fluentui/react-components";
 import { EditRegular, CheckmarkRegular } from "@fluentui/react-icons";
 import MonacoEditor from "@monaco-editor/react";
 import {
@@ -24,17 +15,17 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const useStyles = makeStyles({
+const useStyles = fc.makeStyles({
   content: {
     display: "flex",
     flexGrow: 1,
     width: 0,
     flexDirection: "column",
-    backgroundColor: tokens.colorNeutralBackground3,
+    backgroundColor: fc.tokens.colorNeutralBackground3,
   },
   toolbar: {
     height: "52px",
-    backgroundColor: tokens.colorNeutralBackground6,
+    backgroundColor: fc.tokens.colorNeutralBackground6,
   },
   area: {
     width: "100%",
@@ -95,16 +86,28 @@ const data = [
 export default function Editor(): JSX.Element {
   const classes = useStyles();
   const [checkedValues, setCheckedValues] = useState<Record<string, string[]>>({
-    edit: ["bold", "italic"],
+    edit: ["editing"],
   });
-  const onChange: ToolbarProps["onCheckedValueChange"] = (
-    e,
-    { name, checkedItems }
-  ) => {
-    setCheckedValues((s) => {
-      return s ? { ...s, [name]: checkedItems } : { [name]: checkedItems };
-    });
-  };
+  const [selectedValue, setSelectedValue] = useState<fc.TabValue>("query");
+
+  const onTabSelect = useCallback(
+    (_event: fc.SelectTabEvent, data: fc.SelectTabData) => {
+      setSelectedValue(data.value);
+    },
+    []
+  );
+
+  const onCheckedValueChange = useCallback(
+    (
+      _ev: any,
+      { name, checkedItems }: { name: string; checkedItems: string[] }
+    ) => {
+      setCheckedValues((s) => {
+        return s ? { ...s, [name]: checkedItems } : { [name]: checkedItems };
+      });
+    },
+    []
+  );
 
   const readOnly = useMemo(
     () => !(checkedValues["edit"] || []).includes("editing"),
@@ -113,27 +116,33 @@ export default function Editor(): JSX.Element {
 
   return (
     <div className={classes.content}>
-      <TabList>
-        <Tab value={"query"}>Query</Tab>
-        <Tab value={"plot"}>Plot</Tab>
-      </TabList>
-      <Toolbar
+      <fc.TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
+        <fc.Tab id={"query"} value={"query"}>
+          Query
+        </fc.Tab>
+        <fc.Tab id={"plot"} value={"plot"}>
+          Plot
+        </fc.Tab>
+      </fc.TabList>
+      <fc.Toolbar
         className={classes.toolbar}
         checkedValues={checkedValues}
-        onCheckedValueChange={onChange}
+        onCheckedValueChange={onCheckedValueChange}
       >
-        <ToolbarToggleButton
-          icon={
-            (checkedValues["edit"] || []).includes("editing") ? (
-              <CheckmarkRegular />
-            ) : (
-              <EditRegular />
-            )
-          }
-          name="edit"
-          value="editing"
-        />
-      </Toolbar>
+        <fc.Tooltip
+          content={"Toggle query edit mode."}
+          relationship="description"
+          withArrow
+          showDelay={600}
+        >
+          <fc.ToolbarToggleButton
+            icon={readOnly ? <EditRegular /> : <CheckmarkRegular />}
+            name="edit"
+            value="editing"
+          />
+        </fc.Tooltip>
+        <fc.ToolbarDivider />
+      </fc.Toolbar>
       <MonacoEditor
         height={"200px"}
         width={"100%"}

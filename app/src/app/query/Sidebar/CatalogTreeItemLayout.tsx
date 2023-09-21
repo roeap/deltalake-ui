@@ -2,17 +2,7 @@
 
 import { useMemo } from "react";
 import { TreeItemLayout } from "@fluentui/react-components";
-import {
-  ServerRegular,
-  TableSimpleMultipleRegular,
-  TableSimpleRegular,
-  TextFieldRegular,
-  NumberSymbolRegular,
-  BracesRegular,
-  ListRegular,
-  CalendarMonthRegular,
-  ClockRegular,
-} from "@fluentui/react-icons";
+import * as icons from "@fluentui/react-icons";
 import { Type } from "apache-arrow";
 
 type CatalogInfo = {
@@ -46,25 +36,25 @@ export function CatalogTreeItemLayout({
   let { icon, label } = useMemo(() => {
     switch (item.kind) {
       case "catalog":
-        return { icon: <ServerRegular />, label: item.name };
+        return { icon: <icons.ServerRegular />, label: item.name };
       case "schema":
-        return { icon: <TableSimpleMultipleRegular />, label: item.name };
+        return { icon: <icons.TableSimpleMultipleRegular />, label: item.name };
       case "table":
-        return { icon: <TableSimpleRegular />, label: item.name };
+        return { icon: <icons.TableSimpleRegular />, label: item.name };
       case "field":
         const label = `${item.name}`;
         if (item.dataType === Type.Utf8) {
-          return { icon: <TextFieldRegular />, label };
+          return { icon: <icons.TextFieldRegular />, label };
         } else if ([Type.Map, Type.Struct].includes(item.dataType)) {
-          return { icon: <BracesRegular />, label };
+          return { icon: <icons.BracesRegular />, label };
         } else if ([Type.List, Type.FixedSizeList].includes(item.dataType)) {
-          return { icon: <ListRegular />, label };
+          return { icon: <icons.ListRegular />, label };
         } else if (
           [Type.Date, Type.DateDay, Type.DateMillisecond].includes(
             item.dataType
           )
         ) {
-          return { icon: <CalendarMonthRegular />, label };
+          return { icon: <icons.CalendarMonthRegular />, label };
         } else if (
           [
             Type.Timestamp,
@@ -78,9 +68,9 @@ export function CatalogTreeItemLayout({
             Type.TimeNanosecond,
           ].includes(item.dataType)
         ) {
-          return { icon: <ClockRegular />, label };
+          return { icon: <icons.ClockRegular />, label };
         } else {
-          return { icon: <NumberSymbolRegular />, label };
+          return { icon: <icons.NumberSymbolRegular />, label };
         }
     }
   }, [item]);
