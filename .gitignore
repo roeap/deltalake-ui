@@ -35,3 +35,9 @@ yarn-error.log*
 next-env.d.ts
 target
 .yarn
+.env
+.venv
+.dagster
+
+__pycache__
+.data

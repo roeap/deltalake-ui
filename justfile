@@ -9,3 +9,6 @@ compose:
 
 dev:
   npm run dev --workspace=deltalake-ui
+
+data:
+  DAGSTER_HOME="{{ justfile_directory() }}/.dagster" poetry run dagster dev -m lakehouse
