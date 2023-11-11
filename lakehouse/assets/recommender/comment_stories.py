@@ -1,5 +1,5 @@
 import pandas as pd
-from dagster import AssetIn, asset
+from dagster import AssetIn, asset, AssetExecutionContext
 from pandas import DataFrame, Series
 
 
@@ -14,11 +14,13 @@ from pandas import DataFrame, Series
     io_manager_key="delta_io_manager",
     key_prefix=["recommender"],
 )
-def comment_stories(stories: DataFrame, comments: DataFrame) -> DataFrame:
-    """Comments linked to their root stories.
+def comment_stories(
+    context: AssetExecutionContext, stories: DataFrame, comments: DataFrame
+) -> DataFrame:
+    """Comments linked to their root stories."""
+    context.log.warn(f"stories.shape {stories.shape}")
+    context.log.warn(f"comments.shape {comments.shape}")
 
-    Owners: sandy@dagsterlabs.com, owen@dagsterlabs.com
-    """
     comments.rename(
         columns={"user_id": "commenter_id", "id": "comment_id"}, inplace=True
     )
@@ -31,10 +33,14 @@ def comment_stories(stories: DataFrame, comments: DataFrame) -> DataFrame:
     )
     remaining_comments = comments.copy()
 
+    context.log.warn(f"remaining_comments.shape {remaining_comments.shape}")
+
     max_depth = 10
     depth = 0
     while remaining_comments.shape[0] > 0 and depth < max_depth:
         depth += 1
+        context.log.warn(f"depth: {depth}")
+
         # join comments with stories and remove all comments that match a story
         comment_stories_at_depth = remaining_comments.merge(
             stories, left_on="parent", right_index=True

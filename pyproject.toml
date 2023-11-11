@@ -7,8 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10,<=3.11"
-dagster = "^1.4.15"
-dagster-webserver = "^1.4.15"
+dagster = "^1.5.7"
+dagster-webserver = "^1.5.7"
 dagster-deltalake = { path = "../dagster/python_modules/libraries/dagster-deltalake", develop = true }
 dagster-deltalake-pandas = { path = "../dagster/python_modules/libraries/dagster-deltalake-pandas", develop = true }
 scikit-learn = "^1.3"
@@ -17,6 +17,9 @@ scipy = "^1.9"
 [tool.poetry.group.dev.dependencies]
 requests = "^2.31.0"
 ipykernel = "^6.25.1"
+pyspark = "^3.5.0"
+delta-spark = "^3.0.0"
+polars = "^0.19.13"
 
 [build-system]
 requires = ["poetry-core"]

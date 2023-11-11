@@ -88,4 +88,4 @@ def comments(items: pa.Table) -> pa.Table:
     metadata={"partition_expr": "hour"},
 )
 def stories(items: pa.Table) -> pa.Table:
-    return items.where(pc.field("type") == "story")
+    return items.filter(pc.field("type") == "story")
