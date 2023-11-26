@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import * as fc from "@fluentui/react-components";
-import { useSuspenseQuery } from "@suspensive/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import * as arrow from "apache-arrow";
 import { CatalogTreeItemLayout } from "./CatalogTreeItemLayout";
 

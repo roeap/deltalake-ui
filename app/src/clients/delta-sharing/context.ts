@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from "react";
 import { usePathname } from "next/navigation";
-import { useSuspenseQuery } from "@suspensive/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { getSharingServer } from "@/gen";
 import { DeltaSharingClient } from "./client";

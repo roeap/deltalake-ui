@@ -7,13 +7,11 @@ import {
   shorthands,
   tokens,
   ButtonProps,
-} from "@fluentui/react-components";
-import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbButton,
   BreadcrumbDivider,
-} from "@fluentui/react-breadcrumb-preview";
+} from "@fluentui/react-components";
 import {
   TableSimpleMultipleRegular,
   ServerRegular,
@@ -132,11 +130,7 @@ export default function SharingLayout({
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        <Breadcrumb
-          aria-label="Delta Sharing navigation"
-          size="large"
-          appearance="transparent"
-        >
+        <Breadcrumb aria-label="Delta Sharing navigation" size="large">
           {navItems.map((el, idx) =>
             renderLink(idx, el, idx === navItems.length - 1)
           )}

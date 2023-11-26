@@ -1,7 +1,7 @@
 "use client";
 
 import * as rc from "recharts";
-import { useSuspenseQuery } from "@suspensive/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { tableFromIPC } from "apache-arrow";
 
 import { query as connectQuery } from "@/gen";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSuspenseQuery } from "@suspensive/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { SharingServerContext, useSharingServer } from "@/clients";
 
 export default function SharingServerLayout({

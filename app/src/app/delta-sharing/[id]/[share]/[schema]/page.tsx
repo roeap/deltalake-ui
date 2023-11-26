@@ -1,7 +1,7 @@
 "use client";
 
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
-import { useSuspenseQuery } from "@suspensive/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useSharingServerContext } from "@/clients";
 import { TableCard } from "./TableCard";
