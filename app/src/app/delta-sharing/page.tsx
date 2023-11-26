@@ -2,6 +2,7 @@
 
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTransport } from "@connectrpc/connect-query";
 
 import { listSharingServers } from "@/gen";
 import { DeltaServerCard } from "./DeltaServerCard";
@@ -20,7 +21,10 @@ const useStyles = makeStyles({
 
 export default function Page() {
   const styles = useStyles();
-  const { data } = useSuspenseQuery(listSharingServers.useQuery({}));
+  const transport = useTransport();
+  const { data } = useSuspenseQuery(
+    listSharingServers.createUseQueryOptions({}, { transport })
+  );
 
   return (
     <div className={styles.root}>

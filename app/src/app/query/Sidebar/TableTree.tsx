@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import * as fc from "@fluentui/react-components";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTransport } from "@connectrpc/connect-query";
 import * as arrow from "apache-arrow";
-import { CatalogTreeItemLayout } from "./CatalogTreeItemLayout";
 
+import { CatalogTreeItemLayout } from "./CatalogTreeItemLayout";
 import { getTables } from "@/gen";
 
 type CatalogInfo = {
@@ -92,9 +93,10 @@ function getFieldItems(field: arrow.Field, rootValue: string): FlatItem[] {
 }
 
 const useTreeItems = (): FlatItem[] => {
+  const transport = useTransport();
   const [flatTree, setFlatTree] = useState<FlatItem[]>([]);
   const { data } = useSuspenseQuery(
-    getTables.useQuery({ includeSchema: true })
+    getTables.createUseQueryOptions({ includeSchema: true }, { transport })
   );
 
   useEffect(() => {

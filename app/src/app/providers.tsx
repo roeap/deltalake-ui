@@ -21,9 +21,7 @@ import { ThemeProvider, useThemeContext } from "@/components";
 const renderer = createDOMRenderer();
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: {
-      suspense: true,
-    },
+    queries: {},
   },
 });
 

@@ -3,6 +3,7 @@
 import * as rc from "recharts";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { tableFromIPC } from "apache-arrow";
+import { useTransport } from "@connectrpc/connect-query";
 
 import { query as connectQuery } from "@/gen";
 
@@ -11,7 +12,13 @@ type ChartProps = {
 };
 
 export function Chart(props: ChartProps): JSX.Element {
-  const connect = connectQuery.useQuery({ query: props.query || "" });
+  const transport = useTransport();
+  const connect = connectQuery.createUseQueryOptions(
+    {
+      query: props.query || "",
+    },
+    { transport }
+  );
 
   const { data: queryData } = useSuspenseQuery({
     queryKey: [...connect.queryKey, "arrow"],
