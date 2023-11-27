@@ -1,19 +1,19 @@
-import pandas as pd
-from dagster import Definitions, asset
+from dagster import Definitions
 from dagster_deltalake import LocalConfig
 from dagster_deltalake_pandas import DeltaLakePandasIOManager
-from .hn_resource import HNAPIClient, HNAPISubsampleClient
 
 from .assets import (
     # activity_analytics_assets,
     core_assets,
     recommender_assets,
+    taxi_assets,
 )
-
+from .hn_resource import HNAPISubsampleClient
 
 all_assets = [
     *core_assets,
     *recommender_assets,
+    *taxi_assets,
     # *activity_analytics_assets,
 ]
 

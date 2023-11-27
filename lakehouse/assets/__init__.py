@@ -1,6 +1,6 @@
 from dagster import load_assets_from_package_module
 
-from . import activity_analytics, core, recommender
+from . import core, recommender, taxi
 
 CORE = "core"
 ACTIVITY_ANALYTICS = "activity_analytics"
@@ -17,3 +17,5 @@ core_assets = load_assets_from_package_module(package_module=core, group_name=CO
 recommender_assets = load_assets_from_package_module(
     package_module=recommender, group_name=RECOMMENDER
 )
+
+taxi_assets = load_assets_from_package_module(package_module=taxi, group_name="taxi")
