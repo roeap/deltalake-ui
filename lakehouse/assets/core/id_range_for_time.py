@@ -1,12 +1,10 @@
 from datetime import datetime, timezone
 from typing import Any, Mapping, Tuple
 
-from dagster import (
-    OpExecutionContext,
-    _check as check,
-)
+from dagster import OpExecutionContext
+from dagster import _check as check
 
-from lakehouse.hn_resource import HNClient
+from lakehouse.resources.hn_resource import HNClient
 
 
 def binary_search_nearest_left(get_value, start, end, min_target):

@@ -2,8 +2,10 @@ import collections
 
 import numpy as np
 from dagster import (
+    AssetExecutionContext,
     AssetKey,
     AssetOut,
+    Output,
     SourceAsset,
     multi_asset,
 )
@@ -11,8 +13,8 @@ from dagster import (
 taxi_zones = SourceAsset(
     key=AssetKey("taxi_zones"),
     description="Raw GeoJSON for NY taxi zones",
-    metadata={"format": "csv"},
-    # io_manager_key="object_store_io",
+    metadata={"format": "json"},
+    io_manager_key="object_store_io_manager",
 )
 
 
@@ -30,7 +32,9 @@ taxi_zones = SourceAsset(
         "zone_to_borough": AssetOut(description="Mapping zones to boroughs"),
     },
 )
-def geo_data(taxi_zones: dict):
+def geo_data(context: AssetExecutionContext, taxi_zones):
+    """Extracts boroughs, zones, and zone_to_borough from taxi_zones."""
+    context.log.info(str(type(taxi_zones)))
     features = taxi_zones["features"]
     borough_polygons = collections.defaultdict(list)
     zone_polygons = collections.defaultdict(list)
@@ -54,11 +58,11 @@ def geo_data(taxi_zones: dict):
 
     # bmapper
     keys = list(borough_polygons.keys())
-    yield {i: keys[i] for i in range(len(keys))}
+    yield Output(value={i: keys[i] for i in range(len(keys))}, output_name="boroughs")
 
     # zmapper
     keys = list(zone_polygons.keys())
-    yield {i: keys[i] for i in range(len(keys))}
+    yield Output(value={i: keys[i] for i in range(len(keys))}, output_name="zones")
 
     # zone_to_borough
-    yield zone_to_borough
+    yield Output(value=zone_to_borough, output_name="zone_to_borough")

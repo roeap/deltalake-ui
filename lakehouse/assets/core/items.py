@@ -1,11 +1,10 @@
-from dagster import Output, asset, AssetExecutionContext
-from pandas import DataFrame, ArrowDtype, Series
-
-
-from lakehouse.partitions import hourly_partitions
-from lakehouse.hn_resource import HNClient
 import pyarrow as pa
 import pyarrow.compute as pc
+from dagster import AssetExecutionContext, Output, asset
+from pandas import ArrowDtype, DataFrame, Series
+
+from lakehouse.partitions import hourly_partitions
+from lakehouse.resources.hn_resource import HNClient
 
 from .id_range_for_time import id_range_for_time
 

@@ -1,5 +1,5 @@
 import pandas as pd
-from dagster import AssetIn, asset, AssetExecutionContext
+from dagster import AssetExecutionContext, AssetIn, asset
 from pandas import DataFrame, Series
 
 
