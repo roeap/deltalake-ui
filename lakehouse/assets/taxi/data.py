@@ -1,3 +1,5 @@
+import datetime as dt
+
 import pyarrow as pa
 import pyarrow.parquet as pq
 import requests
@@ -9,8 +11,7 @@ DATA_PARTITION = MonthlyPartitionsDefinition(start_date="2015-01-01")
 
 _TAXI_SCHEMA_RAW = pa.schema(
     [
-        pa.field("year", pa.int64()),
-        pa.field("month", pa.int64()),
+        pa.field("month", pa.date64()),
         pa.field("vendor_id", pa.int64()),
         pa.field("tpep_pickup_datetime", pa.timestamp("us")),
         pa.field("tpep_dropoff_datetime", pa.timestamp("us")),
@@ -46,7 +47,7 @@ _RENAME_MAP = {
     io_manager_key="delta_io_manager",
     partitions_def=DATA_PARTITION,
     description="New York Taxi data loaded from authority.",
-    metadata={"partition_by": ["year", "month"]},
+    metadata={"partition_expr": "month"},
     compute_kind="delta",
     # config_schema={"iterations": int}
 )
@@ -59,11 +60,15 @@ def yellow_cab_trips(context: OpExecutionContext) -> pa.Table:
     table = pq.read_table(pa.py_buffer(response.content), schema=_TAXI_SCHEMA_RAW)
     columns = [_RENAME_MAP.get(col, col) for col in table.column_names]
     table = table.rename_columns(columns)
+    # table = table.add_column(
+    #     0, pa.field("year", pa.int64()), [[int(partition_key[:4])] * table.shape[0]]
+    # )
+
+    date = dt.datetime.fromisoformat(partition_key)
     table = table.add_column(
-        0, pa.field("year", pa.int64()), [[int(partition_key[:4])] * table.shape[0]]
-    )
-    table = table.add_column(
-        1, pa.field("month", pa.int64()), [[int(partition_key[5:-3])] * table.shape[0]]
+        0,
+        pa.field("month", pa.date64()),
+        pa.array([date] * table.shape[0], pa.date64()),
     )
     return table
 
