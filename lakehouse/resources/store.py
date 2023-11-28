@@ -1,4 +1,5 @@
 import json
+from io import BytesIO
 from typing import Any, Optional
 
 from dagster import (
@@ -10,6 +11,7 @@ from dagster import (
     io_manager,
 )
 from object_store import ObjectStore
+from pyarrow import csv
 
 
 class ObjectStoreIoManager(IOManager):
@@ -19,9 +21,14 @@ class ObjectStoreIoManager(IOManager):
         self._store = ObjectStore(location, options=storage_options)
 
     def load_input(self, context: InputContext) -> Any:
-        context.log.info("/".join(context.asset_key.path))
-        data = self._store.get(f"{'/'.join(context.asset_key.path)}.json")
-        return json.loads(data)
+        format = context.metadata.get("format")
+
+        data = self._store.get(f"{'/'.join(context.asset_key.path)}.{format}")
+
+        if format == "json":
+            return json.loads(data)
+        if format == "csv":
+            return csv.read_csv(BytesIO(data))
 
     def handle_output(self, context: OutputContext, obj: Any) -> None:
         return super().handle_output(context, obj)

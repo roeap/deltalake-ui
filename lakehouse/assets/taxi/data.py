@@ -11,16 +11,15 @@ DATA_PARTITION = MonthlyPartitionsDefinition(start_date="2015-01-01")
 
 _TAXI_SCHEMA_RAW = pa.schema(
     [
-        pa.field("month", pa.date64()),
-        pa.field("vendor_id", pa.int64()),
+        pa.field("VendorID", pa.int64()),
         pa.field("tpep_pickup_datetime", pa.timestamp("us")),
         pa.field("tpep_dropoff_datetime", pa.timestamp("us")),
         pa.field("passenger_count", pa.float64()),
         pa.field("trip_distance", pa.float64()),
-        pa.field("ratecode_id", pa.float64()),
+        pa.field("RatecodeID", pa.float64()),
         pa.field("store_and_fwd_flag", pa.string()),
-        pa.field("pu_location_id", pa.int64()),
-        pa.field("do_location_id", pa.int64()),
+        pa.field("PULocationID", pa.int64()),
+        pa.field("DOLocationID", pa.int64()),
         pa.field("payment_type", pa.int64()),
         pa.field("fare_amount", pa.float64()),
         pa.field("extra", pa.float64()),
@@ -55,21 +54,20 @@ def yellow_cab_trips(context: OpExecutionContext) -> pa.Table:
     # asset_partition_key is encoded as YYYY-MM--DD
     partition_key = context.asset_partition_key_for_output()
     url = _BASE_URL.format(partition_key[:-3])
+
     context.log.debug(f"loading data from: {url}")
     response = requests.get(url, timeout=500)
     table = pq.read_table(pa.py_buffer(response.content), schema=_TAXI_SCHEMA_RAW)
+
     columns = [_RENAME_MAP.get(col, col) for col in table.column_names]
     table = table.rename_columns(columns)
-    # table = table.add_column(
-    #     0, pa.field("year", pa.int64()), [[int(partition_key[:4])] * table.shape[0]]
-    # )
-
     date = dt.datetime.fromisoformat(partition_key)
     table = table.add_column(
         0,
         pa.field("month", pa.date64()),
         pa.array([date] * table.shape[0], pa.date64()),
     )
+
     return table
 
 

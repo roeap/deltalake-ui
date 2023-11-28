@@ -24,7 +24,7 @@ resources = {
         storage_options=LocalConfig(),
     ),
     "object_store_io_manager": object_store_io.configured(
-        {"root_url": str(find_git_root() / ".data")}
+        {"root_url": str(find_git_root() / "data")}
     ),
     "hn_client": HNAPISubsampleClient(subsample_rate=10),
 }

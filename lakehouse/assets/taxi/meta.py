@@ -2,7 +2,7 @@ import collections
 
 import numpy as np
 from dagster import (
-    AssetExecutionContext,
+    AssetIn,
     AssetKey,
     AssetOut,
     Output,
@@ -10,32 +10,33 @@ from dagster import (
     multi_asset,
 )
 
-taxi_zones = SourceAsset(
-    key=AssetKey("taxi_zones"),
+taxi_zones_geo = SourceAsset(
+    key=AssetKey("taxi_zones_geo"),
     description="Raw GeoJSON for NY taxi zones",
     metadata={"format": "json"},
     io_manager_key="object_store_io_manager",
 )
 
-
-# @observable_source_asset(name="taxi_zones")
-# def taxi_zones(context):
-#     hash_sig = sha256()
-#     hash_sig.update(content)
-#     return LogicalVersion(hash_sig.hexdigest())
+taxi_zones_lookup = SourceAsset(
+    key=AssetKey("taxi_zones_lookup"),
+    description="Raw GeoJSON for NY taxi zones",
+    metadata={"format": "csv"},
+    io_manager_key="object_store_io_manager",
+)
 
 
 @multi_asset(
+    ins={"taxi_zones_geo": AssetIn(key="taxi_zones_geo", metadata={"format": "json"})},
     outs={
         "boroughs": AssetOut(description="Borough identifiers"),
         "zones": AssetOut(description="Zone identifiers"),
         "zone_to_borough": AssetOut(description="Mapping zones to boroughs"),
     },
 )
-def geo_data(context: AssetExecutionContext, taxi_zones):
+def geo_data(taxi_zones_geo: dict):
     """Extracts boroughs, zones, and zone_to_borough from taxi_zones."""
-    context.log.info(str(type(taxi_zones)))
-    features = taxi_zones["features"]
+
+    features = taxi_zones_geo["features"]
     borough_polygons = collections.defaultdict(list)
     zone_polygons = collections.defaultdict(list)
     zone_to_borough = {}

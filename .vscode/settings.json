@@ -4,7 +4,7 @@
   "notebook.formatOnSave.enabled": true,
   "notebook.codeActionsOnSave": {
     "source.fixAll": true,
-    "source.organizeImports": true
+    "source.organizeImports": false
   },
   "[python]": {
     "editor.formatOnSave": true,
