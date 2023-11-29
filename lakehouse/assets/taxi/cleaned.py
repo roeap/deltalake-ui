@@ -43,6 +43,16 @@ expressions = [
     pc.hour(pc.field("pickup_datetime")),
 ]
 
+conditions = [
+    pc.is_valid(pc.field("pickup_location_id")),
+    pc.is_valid(pc.field("dropoff_location_id")),
+    pc.greater(pc.field("trip_distance"), pc.scalar(0.0)),
+    pc.greater(pc.field("passenger_count"), pc.scalar(0.0)),
+    pc.less(pc.field("passenger_count"), pc.scalar(10.0)),
+    pc.greater(pc.field("trip_duration_minutes"), pc.scalar(1.0)),
+    pc.less(pc.field("trip_duration_minutes"), pc.scalar(60.0)),
+]
+
 
 @asset(
     key_prefix=ASSET_PREFIX,
@@ -73,4 +83,12 @@ def yellow_cab_trips_cleaned(yellow_cab_trips: ds.Dataset) -> pa.RecordBatchRead
             )
         ],
     )
-    return project.to_reader()
+    table = project
+    for condition in conditions:
+        table = acero.Declaration(
+            factory_name="filter",
+            options=acero.FilterNodeOptions(filter_expression=condition),
+            inputs=[table],
+        )
+
+    return table.to_reader()
