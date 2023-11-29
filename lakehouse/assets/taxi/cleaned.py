@@ -64,7 +64,9 @@ conditions = [
     op_tags={"format": "delta"},
     io_manager_key="delta_io_manager",
 )
-def yellow_cab_trips_cleaned(yellow_cab_trips: ds.Dataset) -> pa.RecordBatchReader:
+def yellow_cab_trips_cleaned_acero(
+    yellow_cab_trips: ds.Dataset
+) -> pa.RecordBatchReader:
     project = acero.Declaration(
         factory_name="project",
         options=acero.ProjectNodeOptions(
@@ -92,3 +94,54 @@ def yellow_cab_trips_cleaned(yellow_cab_trips: ds.Dataset) -> pa.RecordBatchRead
         )
 
     return table.to_reader()
+
+
+@asset(
+    key_prefix=ASSET_PREFIX,
+    partitions_def=DATA_PARTITION,
+    compute_kind="arrow",
+    description="Taxi Zones Geo Data",
+    metadata={"partition_expr": "month", "columns": columns},
+    op_tags={"format": "delta"},
+    io_manager_key="delta_io_manager",
+)
+def yellow_cab_trips_cleaned_arrow(yellow_cab_trips: pa.Table) -> pa.Table:
+    yellow_cab_trips = yellow_cab_trips.append_column(
+        "trip_duration_minutes",
+        pc.divide(
+            pc.subtract(
+                yellow_cab_trips.column("dropoff_datetime"),
+                yellow_cab_trips.column("pickup_datetime"),
+            ),
+            pa.scalar(dt.timedelta(minutes=1)),
+        ),
+    )
+    yellow_cab_trips = yellow_cab_trips.append_column(
+        "average_velocity_kmh",
+        pc.divide(
+            pc.multiply(yellow_cab_trips.column("trip_distance"), pa.scalar(1.609344)),
+            pc.divide(
+                pc.subtract(
+                    yellow_cab_trips.column("dropoff_datetime"),
+                    yellow_cab_trips.column("pickup_datetime"),
+                ),
+                pa.scalar(dt.timedelta(hours=1)),
+            ),
+        ),
+    )
+    yellow_cab_trips = yellow_cab_trips.append_column(
+        "pickup_day", pc.day_of_week(yellow_cab_trips.column("pickup_datetime"))
+    )
+    yellow_cab_trips = yellow_cab_trips.append_column(
+        "pickup_hour", pc.hour(yellow_cab_trips.column("pickup_datetime"))
+    )
+    yellow_cab_trips = yellow_cab_trips.filter(
+        pc.is_valid(yellow_cab_trips.column("pickup_location_id"))
+        and pc.is_valid(yellow_cab_trips.column("dropoff_location_id"))
+        and pc.greater(yellow_cab_trips.column("trip_distance"), pa.scalar(0.0))
+        and pc.greater(yellow_cab_trips.column("passenger_count"), pa.scalar(0.0))
+        and pc.less(yellow_cab_trips.column("passenger_count"), pa.scalar(10.0))
+        and pc.greater(yellow_cab_trips.column("trip_duration_minutes"), pa.scalar(1.0))
+        and pc.less(yellow_cab_trips.column("trip_duration_minutes"), pa.scalar(60.0))
+    )
+    return yellow_cab_trips
