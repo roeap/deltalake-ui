@@ -12,3 +12,8 @@ dev:
 
 data:
     DAGSTER_HOME="{{ justfile_directory() }}/.dagster" poetry run dagster dev -m lakehouse
+
+profile case:
+    poetry run python -m memray run -o output.bin scripts/profile.py {{ case }}
+    poetry run python -m memray flamegraph --force -o scripts/profiles/{{ case }}.html output.bin
+    rm output.bin
