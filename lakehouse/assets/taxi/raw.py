@@ -47,7 +47,7 @@ _RENAME_MAP = {
 @asset(
     key_prefix=ASSET_PREFIX,
     partitions_def=DATA_PARTITION,
-    description="Yellow Taxi Trip Records",
+    description="Raw Yellow Taxi Trip Records",
     metadata={"partition_expr": "month"},
     compute_kind="arrow",
     code_version="1.0",
