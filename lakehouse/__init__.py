@@ -2,12 +2,15 @@ import warnings
 
 from dagster import Definitions, ExperimentalWarning
 
-from .assets import core_assets, recommender_assets, taxi_assets
+from .assets import taxi_assets
 from .resources import resources
+from .sensors import optimize_arrow_cleaned, optimize_sensor
 
 warnings.filterwarnings("ignore", category=ExperimentalWarning)
 
 defs = Definitions(
-    assets=[*core_assets, *recommender_assets, *taxi_assets],
+    jobs=[optimize_arrow_cleaned],
+    sensors=[optimize_sensor],
+    assets=taxi_assets,
     resources=resources,
 )

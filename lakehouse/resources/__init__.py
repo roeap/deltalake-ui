@@ -1,10 +1,9 @@
 import subprocess
 from pathlib import Path
 
-from dagster_deltalake import LocalConfig
+from dagster_deltalake import DeltaTableResource, LocalConfig
 from dagster_deltalake_pandas import DeltaLakePandasIOManager
 
-from .hn_resource import HNAPISubsampleClient
 from .store import object_store_io as object_store_io
 
 
@@ -26,5 +25,7 @@ resources = {
     "object_store_io_manager": object_store_io.configured(
         {"root_url": str(find_git_root() / "data")}
     ),
-    "hn_client": HNAPISubsampleClient(subsample_rate=10),
+    "arrow_cleaned": DeltaTableResource(
+        url="./.data/taxi/yellow_cab_trips_cleaned_arrow", storage_options=LocalConfig()
+    ),
 }
