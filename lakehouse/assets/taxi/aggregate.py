@@ -26,6 +26,7 @@ aggregate_fns = [pc.mean, pc.max, pc.min]
     compute_kind="acero",
     description="Overall table statistics for taxi trips data.",
     op_tags={"format": "delta"},
+    metadata={"partition_expr": "month"},
     io_manager_key="delta_io_manager",
 )
 def yellow_cab_trips_stats_acero(
