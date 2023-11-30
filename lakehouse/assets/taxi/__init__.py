@@ -1,3 +1,8 @@
+from .aggregate import (
+    yellow_cab_trips_grouped_stats_acero as yellow_cab_trips_grouped_stats_acero,
+)
+from .aggregate import yellow_cab_trips_stats_acero as yellow_cab_trips_stats_acero
+from .aggregate import yellow_cab_trips_stats_arrow as yellow_cab_trips_stats_arrow
 from .cleaned import yellow_cab_trips_cleaned_acero as yellow_cab_trips_cleaned_acero
 from .cleaned import yellow_cab_trips_cleaned_arrow as yellow_cab_trips_cleaned_arrow
 from .constants import DATA_PARTITION as DATA_PARTITION

@@ -46,11 +46,14 @@ expressions = [
 conditions = [
     pc.is_valid(pc.field("pickup_location_id")),
     pc.is_valid(pc.field("dropoff_location_id")),
+    pc.is_valid(pc.field("average_velocity_kmh")),
     pc.greater(pc.field("trip_distance"), pc.scalar(0.0)),
     pc.greater(pc.field("passenger_count"), pc.scalar(0.0)),
     pc.less(pc.field("passenger_count"), pc.scalar(10.0)),
     pc.greater(pc.field("trip_duration_minutes"), pc.scalar(1.0)),
     pc.less(pc.field("trip_duration_minutes"), pc.scalar(60.0)),
+    pc.greater(pc.field("average_velocity_kmh"), pc.scalar(1.0)),
+    pc.less(pc.field("average_velocity_kmh"), pc.scalar(100.0)),
 ]
 
 
@@ -138,10 +141,13 @@ def yellow_cab_trips_cleaned_arrow(yellow_cab_trips: pa.Table) -> pa.Table:
     yellow_cab_trips = yellow_cab_trips.filter(
         pc.is_valid(yellow_cab_trips.column("pickup_location_id"))
         and pc.is_valid(yellow_cab_trips.column("dropoff_location_id"))
+        and pc.is_valid(yellow_cab_trips.column("average_velocity_kmh"))
         and pc.greater(yellow_cab_trips.column("trip_distance"), pa.scalar(0.0))
         and pc.greater(yellow_cab_trips.column("passenger_count"), pa.scalar(0.0))
         and pc.less(yellow_cab_trips.column("passenger_count"), pa.scalar(10.0))
         and pc.greater(yellow_cab_trips.column("trip_duration_minutes"), pa.scalar(1.0))
         and pc.less(yellow_cab_trips.column("trip_duration_minutes"), pa.scalar(60.0))
+        and pc.greater(yellow_cab_trips.column("average_velocity_kmh"), pa.scalar(1.0))
+        and pc.less(yellow_cab_trips.column("average_velocity_kmh"), pa.scalar(100.0))
     )
     return yellow_cab_trips
