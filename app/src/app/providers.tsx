@@ -19,11 +19,7 @@ import { Studio } from "./Studio";
 import { ThemeProvider, useThemeContext } from "@/components";
 
 const renderer = createDOMRenderer();
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {},
-  },
-});
+const queryClient = new QueryClient();
 
 const useStyles = makeStyles({
   root: {
@@ -38,10 +34,9 @@ export const Providers: FC<{ children: React.ReactNode }> = ({ children }) => {
   const transport = useMemo(
     () =>
       createConnectTransport({
-        baseUrl:
-          typeof window !== "undefined" ? `${window.location.origin}/api` : "",
+        baseUrl: typeof window !== "undefined" ? `${window.location.origin}/api` : "",
       }),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -67,9 +62,7 @@ export const Providers: FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-const WrappedFluentProvider: FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const WrappedFluentProvider: FC<{ children: React.ReactNode }> = ({ children }) => {
   const styles = useStyles();
   const { theme } = useThemeContext();
   const currentTheme = theme === "light" ? webLightTheme : webDarkTheme;

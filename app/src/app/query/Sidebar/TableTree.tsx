@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import * as fc from "@fluentui/react-components";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { useTransport } from "@connectrpc/connect-query";
+import { useSuspenseQuery } from "@connectrpc/connect-query";
 import * as arrow from "apache-arrow";
 
 import { CatalogTreeItemLayout } from "./CatalogTreeItemLayout";
@@ -93,11 +92,8 @@ function getFieldItems(field: arrow.Field, rootValue: string): FlatItem[] {
 }
 
 const useTreeItems = (): FlatItem[] => {
-  const transport = useTransport();
   const [flatTree, setFlatTree] = useState<FlatItem[]>([]);
-  const { data } = useSuspenseQuery(
-    getTables.createUseQueryOptions({ includeSchema: true }, { transport })
-  );
+  const { data } = useSuspenseQuery(getTables, { includeSchema: true });
 
   useEffect(() => {
     const table = arrow.tableFromIPC<tablesSchema>(data.data);
@@ -139,11 +135,7 @@ const useTreeItems = (): FlatItem[] => {
         items.push(...getFieldItems(field, tableValue));
       }
 
-      setFlatTree([
-        ...Object.values(catalogs),
-        ...Object.values(schemas),
-        ...items,
-      ]);
+      setFlatTree([...Object.values(catalogs), ...Object.values(schemas), ...items]);
     }
   }, [data]);
 
@@ -162,11 +154,7 @@ export function TableTree(): JSX.Element {
         {Array.from(flatTree.items(), (flatTreeItem) => {
           const { item, ...treeItemProps } = flatTreeItem.getTreeItemProps();
           return (
-            <fc.Menu
-              key={flatTreeItem.value}
-              positioning="below-end"
-              openOnContext
-            >
+            <fc.Menu key={flatTreeItem.value} positioning="below-end" openOnContext>
               <fc.MenuTrigger disableButtonEnhancement>
                 <fc.FlatTreeItem {...focusTargetAttribute} {...treeItemProps}>
                   <CatalogTreeItemLayout item={item} />

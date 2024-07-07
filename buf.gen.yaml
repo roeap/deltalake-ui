@@ -1,10 +1,15 @@
-version: v1
+version: v2
 plugins:
-  - plugin: es
+  - remote: buf.build/bufbuild/es:v1.10.0
     opt: target=ts
     out: app/src/gen
-  - plugin: connect-query
+  - remote: buf.build/connectrpc/query-es:v1.4.1
     opt:
       - target=ts
       - import_extension=none
     out: app/src/gen
+  - remote: buf.build/connectrpc/es:v1.4.0
+    out: app/src/gen
+    opt:
+      - target=ts
+      - import_extension=none
